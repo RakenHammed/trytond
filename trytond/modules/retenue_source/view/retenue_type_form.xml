@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form>
+    <label name="account"/>
+    <field name="account"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="short_name"/>
+    <field name="short_name"/>
+    <label name="active"/>
+    <field name="active"/>
+    <label name="taux"/>
+    <field name="taux"/>
+</form>
