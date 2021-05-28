@@ -12,4 +12,4 @@
 	url = https://github.com/RakenHammed/country
 [submodule "trytond/modules/currency"]
 	path = trytond/modules/currency
-	url = https://github.com/RakenHammed/country
+	url = https://github.com/RakenHammed/currency
