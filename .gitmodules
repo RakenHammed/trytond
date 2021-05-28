@@ -1,0 +1,12 @@
+[submodule "trytond/modules/account"]
+	path = trytond/modules/account
+	url = https://github.com/tryton/account
+[submodule "trytond/modules/party"]
+	path = trytond/modules/party
+	url = https://github.com/tryton/party
+[submodule "trytond/modules/currency"]
+	path = trytond/modules/currency
+	url = https://github.com/tryton/currency
+[submodule "trytond/modules/country"]
+	path = trytond/modules/country
+	url = https://github.com/tryton/country
