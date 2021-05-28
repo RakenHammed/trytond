@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############# -->
+        <!-- # Root Menu # -->
+        <!-- ############# -->
+        <menuitem name="Retenue" id="menu_retenue" sequence="1"/>
+        <!-- ######### -->
+        <!-- # Retenue # -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="retenue_view_form">
+            <field name="model">retenue_source.retenue</field>
+            <field name="type">form</field>
+            <field name="name">retenue_form</field>
+        </record>
+        <record model="ir.ui.view" id="retenue_view_list">
+            <field name="model">retenue_source.retenue</field>
+            <field name="type">tree</field>
+            <field name="name">retenue_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_retenue">
+            <field name="name">Retenue à la source</field>
+            <field name="res_model">retenue_source.retenue</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_retenue_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="retenue_view_list"/>
+            <field name="act_window" ref="act_retenue"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_retenue_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="retenue_view_form"/>
+            <field name="act_window" ref="act_retenue"/>
+        </record>
+        <!-- <record model="ir.model.access" id="access_retenue">
+            <field name="model" search="[('model', '=', 'retenue_source.retenue')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_move">
+            <field name="model" search="[('model', '=', 'account.move')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record> -->
+        <record model="ir.model.button" id="valider_move_button">
+            <field name="name">create_move</field>
+            <field name="string">Create move</field>
+            <field name="model" search="[('model', '=', 'retenue_source.retenue')]"/>
+        </record>
+        <record model="ir.model.button" id="valider_move">
+            <field name="name">open</field>
+            <field name="string">Open</field>
+            <field name="model" search="[('model', '=', 'retenue_source.retenue')]"/>
+        </record>
+        <record model="ir.model.button" id="cancel_move_button">
+            <field name="name">cancel</field>
+            <field name="string">Cancel</field>
+            <field name="model" search="[('model', '=', 'retenue_source.retenue')]"/>
+        </record>
+        <record model="ir.model.button" id="re_open_move_button">
+            <field name="name">re_open</field>
+            <field name="string">Re-Open</field>
+            <field name="model" search="[('model', '=', 'retenue_source.retenue')]"/>
+        </record>
+        <record model="ir.model.button" id="to_delete_move_button">
+            <field name="name">to_delete</field>
+            <field name="string">To Delete</field>
+            <field name="model" search="[('model', '=', 'retenue_source.retenue')]"/>
+        </record>
+        <record model="ir.action.report" id="report_retenue_source">
+            <field name="name">Retenue à la source</field>
+            <field name="report_name">retenue_source.retenue</field>
+            <field name="model">retenue_source.retenue</field>
+            <field name="report">retenue_source/retenue_source.ods</field>
+            <field name="template_extension">ods</field>
+        </record>
+        <record model="ir.action.keyword" id="report_retenue_source_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">retenue_source.retenue,-1</field>
+            <field name="action" ref="report_retenue_source"/>
+        </record>
+        <menuitem parent="menu_retenue" sequence="1" action="act_retenue" id="menu_retenue_access"/>
+        <!-- ######### -->
+        <!-- # RetenueType# -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="retenue_type_view_form">
+            <field name="model">retenue_source.retenue.type</field>
+            <field name="type">form</field>
+            <field name="name">retenue_type_form</field>
+        </record>
+        <record model="ir.ui.view" id="retenue_type_view_list">
+            <field name="model">retenue_source.retenue.type</field>
+            <field name="type">tree</field>
+            <field name="name">retenue_type_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_retenue_type">
+            <field name="name">Types de retenues à la source</field>
+            <field name="res_model">retenue_source.retenue.type</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_retenue_type_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="retenue_type_view_list"/>
+            <field name="act_window" ref="act_retenue_type"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_retenue_type_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="retenue_type_view_form"/>
+            <field name="act_window" ref="act_retenue_type"/>
+        </record>
+        <menuitem parent="menu_retenue" sequence="1" action="act_retenue_type" id="menu_retenue_type"/>
+        <record model="retenue_source.retenue.type" id="retenue_01">
+            <field name="name">01- Traitements, salaires, pensions et rentes viageres Regime Commun</field>
+            <field name="short_name">Traitements, salaires, pensions et rentes viageres Regime Commun</field>
+            <field name="code">01</field>
+
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_170">
+            <field name="name">02- Traitements et salaires Taux 20%</field>
+            <field name="short_name">Traitements et salaires Taux 20%</field>
+            <field name="code">02</field>
+
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_02a">
+            <field name="name">03a- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales servis aux personnes physiques domiciliees</field>
+            <field name="short_name">03a- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales</field>
+            <field name="code">03a</field>
+            <field name="taux" eval="Decimal('10')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_02b">
+            <field name="name">03b- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales servis aux personnes morales domiciliees</field>
+            <field name="short_name">03b- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales</field>
+            <field name="code">03b</field>
+            <field name="taux" eval="Decimal('10')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_02c">
+            <field name="name">03c- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales servis aux personnes physiques non domiciliees</field>
+            <field name="short_name">03c- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales</field>
+            <field name="code">03c</field>
+            <field name="taux" eval="Decimal('10')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_02d">
+            <field name="name">03d- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales servis aux personnes morales non domiciliees</field>
+            <field name="short_name">03d- Honoraires, commissions, courtages, loyers et remunerations des activites non commerciales</field>
+            <field name="code">03d</field>
+            <field name="taux" eval="Decimal('10')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_03">
+            <field name="name">04- Honoraires servis aux personnes morales et aux personnes physiques soumises au regime reel</field>
+            <field name="short_name">Honoraires servis aux personnes soumises au regime reel</field>
+            <field name="code">04</field>
+            <field name="taux" eval="Decimal('3')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_180">
+            <field name="name">05- Honoraires servis aux bureaux d'etudes exportateurs</field>
+            <field name="short_name">Honoraires servis aux bureaux d'etudes exportateurs</field>
+            <field name="code">05</field>
+            <field name="taux" eval="Decimal('2.5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_04">
+            <field name="name">06- Loyers des hotels</field>
+            <field name="short_name">Loyers des hotels</field>
+            <field name="code">06</field>
+            <field name="taux" eval="Decimal('5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_05a">
+            <field name="name">07a- Autres revenus payes a des personnes physiques ni domicilies ni etablis</field>
+            <field name="short_name">Autres revenus payes a des PP ni domicilies ni etablis</field>
+            <field name="code">07a</field>
+            <field name="taux" eval="Decimal('15')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_05b">
+            <field name="name">07b- Autres revenus payes a des personnes morales ni domicilies ni etablis</field>
+            <field name="short_name">Autres revenus payes a des PM ni domicilies ni etablis</field>
+            <field name="code">07b</field>
+            <field name="taux" eval="Decimal('15')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_06">
+            <field name="name">08- Interets des depots dans les comptes d epargne prives dans les etablissements bancaires et la caisse nationale d epargne de Tunisie</field>
+            <field name="short_name">Interets des depots dans les comptes d epargne prives dans les etablissements bancaires et la caisse nationale d epargne de Tunisie</field>
+            <field name="code">08</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_07a">
+            <field name="name">09a- Revenus des autres capitaux mobiliers revenant aux personnes physiques residentes</field>
+            <field name="short_name">Autres capitaux mobiliers</field>
+            <field name="code">09a</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_07b">
+            <field name="name">09b- Revenus des autres capitaux mobiliers revenant aux personnes morales residentes</field>
+            <field name="short_name">Autres capitaux mobiliers</field>
+            <field name="code">09b</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_07c">
+            <field name="name">09c- Revenus des autres capitaux mobiliers revenant aux personnes physiques non residentes</field>
+            <field name="short_name">Autres capitaux mobiliers</field>
+            <field name="code">09c</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_07d">
+            <field name="name">09d- Revenus des autres capitaux mobiliers revenant aux personnes morales non residentes</field>
+            <field name="short_name">Autres capitaux mobiliers</field>
+            <field name="code">09d</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_08">
+            <field name="name">10- Revenus des valeurs mobilieres revenant aux non domicilies, ni etablis a l exception des parts des actions et des plus -value provenant de la cessation des valeurs mobilieres</field>
+            <field name="short_name">Revenus des valeurs mobilieres revenant aux non domicilies, ni etablis a l exception des parts des actions et des plus -value provenant de la cessation des valeurs mobilieres</field>
+            <field name="code">10</field>
+            <field name="taux" eval="Decimal('15')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_09a">
+            <field name="name">11a- Jetons de presence servis à des personnes physiques résidentes</field>
+            <field name="short_name">Jetons de presence</field>
+            <field name="code">11a</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_09b">
+            <field name="name">11b- Jetons de presence servis à des personnes morales résidentes</field>
+            <field name="short_name">Jetons de presence</field>
+            <field name="code">11b</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_09c">
+            <field name="name">11c- Jetons de presence servis à des personnes physiques non résidentes</field>
+            <field name="short_name">Jetons de presence</field>
+            <field name="code">11c</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_09d">
+            <field name="name">11d- Jetons de presence servis à des personnes morales non résidentes</field>
+            <field name="short_name">Jetons de presence</field>
+            <field name="code">11d</field>
+            <field name="taux" eval="Decimal('20')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_10">
+            <field name="name">12- Remunerations payees aux salaries et aux non salaries en contre partie d un travail occasionnel ou accidentel en dehors de leurs activites principales</field>
+            <field name="short_name">Remunerations payees aux salaries et aux non salaries en contre partie d un travail occasionnel ou accidentel en dehors de leurs activites principales</field>
+            <field name="code">12</field>
+            <field name="taux" eval="Decimal('15')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_11">
+            <field name="name">13- Interets des prets payes aux etablissements bancaires non etablis en Tunisie</field>
+            <field name="short_name">Interets des prets payes aux etablissements bancaires non etablis en Tunisie</field>
+            <field name="code">13</field>
+            <field name="taux" eval="Decimal('5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_12a">
+            <field name="name">14a- Prix de cession declare dans l acte (plus-value immobiliere) pour les residents</field>
+            <field name="short_name">Plus-value immobiliere</field>
+            <field name="code">14a</field>
+            <field name="taux" eval="Decimal('2.5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_12b">
+            <field name="name">14b- Prix de cession declare dans l acte (plus-value immobiliere) pour les non residents personnes physiques</field>
+            <field name="short_name">Plus-value immobiliere</field>
+            <field name="code">14b</field>
+            <field name="taux" eval="Decimal('2.5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_12c">
+            <field name="name">14c- Prix de cession declare dans l acte (plus-value immobiliere) pour les non residents personnes morales</field>
+            <field name="short_name">Plus-value immobiliere</field>
+            <field name="code">14c</field>
+            <field name="taux" eval="Decimal('15')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_13a">
+            <field name="name">15a- Marches conclus avec les residents et les non residents etablis, des montants superieurs ou egaux a 5000 D et des montants payes par les etablissements et les entreprises publiques superieurs ou egaux a 1000 D TTC Personnes Physiques</field>
+            <field name="short_name">Marches</field>
+            <field name="code">15a</field>
+            <field name="taux" eval="Decimal('1.5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_13b">
+            <field name="name">15b- Marches conclus avec les residents et les non residents etablis, des montants superieurs ou egaux a 5000 D et des montants payes par les etablissements et les entreprises publiques superieurs ou egaux a 1000 D TTC Personnes Morales</field>
+            <field name="short_name">Marches</field>
+            <field name="code">15b</field>
+            <field name="taux" eval="Decimal('1.5')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_14">
+            <field name="name">16- Retenue a la source de la TVA au titre des montants egaux ou superieurs a 1000 D TTC payes par les etablissements et les entreprises publiques</field>
+            <field name="short_name">la TVA au titre des montants egaux ou superieurs a 1000 D TTC payes par les etablissements et les entreprises publiques</field>
+            <field name="code">16</field>
+            <field name="taux" eval="Decimal('50')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_15">
+            <field name="name">17- Retenue a la source de la TVA au titre des operations realisees avec les personnes n ayant pas un etablissement en Tunisie</field>
+            <field name="short_name">la TVA au titre des operations realisees avec les personnes n ayant pas un etablissement en Tunisie</field>
+            <field name="code">17</field>
+            <field name="taux" eval="Decimal('100')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_16">
+            <field name="name">18- Honoraires servis aux personnes non residentes qui realisent des travaux de construction ou des operations de montage ou des services de controle connexes ou d autres services et travaux pour une duree inferieure a 6 mois</field>
+            <field name="short_name">Honoraires servis aux personnes non residentes qui realisent des travaux de construction ou des operations de montage ou des services de controle connexes ou d autres services et travaux pour une duree inferieure a 6 mois</field>
+            <field name="code">18</field>
+            <field name="taux" eval="Decimal('0')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_20">
+            <field name="name">xx- Avances sur les ventes des entreprises industrielles et des entreprises de commerce en gros aux P.P soumises au régime forfaitaire</field>
+            <field name="short_name">Avances sur les ventes des entreprises industrielles et des entreprises de commerce en gros aux P.P soumises au régime forfaitaire</field>
+            <field name="code">xx</field>
+            <field name="taux" eval="Decimal('1')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_191">
+            <field name="name">19a- Plus values de cession des actions ou des parts prevues par la legislation effectuees par les personnes physiques non etablies et non residentes</field>
+            <field name="short_name">Plus values de cession effectuees par les PP non etablies et non residentes</field>
+            <field name="code">19a</field>
+            <field name="taux" eval="Decimal('10')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_192">
+            <field name="name">19b- Plus values de cession des actions ou des parts prevues par la legislation effectuees par les personnes morales non etablies et non residentes</field>
+            <field name="short_name">Plus values de cession effectuees par les PM non etablies et non residentes</field>
+            <field name="code">19b</field>
+            <field name="taux" eval="Decimal('30')"/>
+            <field name="active">True</field>
+        </record>
+        <record model="retenue_source.retenue.type" id="retenue_21">
+            <field name="name">xx- Redevance de subvention de la caisse générale de conpensation</field>
+            <field name="short_name">Redevance de subvention de la caisse générale de conpensation</field>
+            <field name="code">xx</field>
+            <field name="taux" eval="Decimal('1')"/>
+            <field name="active">True</field>
+        </record>
+    </data>
+</tryton>

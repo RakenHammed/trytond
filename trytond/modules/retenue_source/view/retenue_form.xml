@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<form col="6">
+    <label name="party"/>
+    <field name="party"/>
+    <label name="type"/>
+    <field name="type"/>
+    <label name="date"/>
+    <field name="date"/>
+    <label name="journal"/>
+    <field name="journal"/>
+    <separator id="amounts" string="montants en dinars :" colspan="6"/>
+    <label name="montant_brut"/>
+    <field name="montant_brut"/>
+    <label name="montant_retenue"/>
+    <field name="montant_retenue"/>
+    <label name="montant_net"/>
+    <field name="montant_net"/>
+    <separator id="state" string="Etat :" colspan="6"/>
+    <label name="state"/>
+    <field name="state"/>
+    <group col="2" colspan="4" id="buttons_retenue_move">
+        <button string="_Valider les ecritures" name="open" icon="tryton-ok" confirm="si vous confirmez, les écritures comptables seront générées"/>
+        <button string="_Annuler les ecritures" name="cancel" confirm="si vous confirmez, les écritures comptables seront supprimées" icon="tryton-go-previous"/>
+        <button string="_ReValider les ecritures" name="re_open" confirm="si vous confirmez, les écritures comptables seront regénérées" icon="tryton-go-next"/>
+    </group>
+    <group col="6" colspan="2" xalign="1.0" xexpand="1"  id="button_delete_retenue">
+        <button colspan="4" string="_Supprimer la retenue" name="to_delete"/>
+    </group>
+    <newline/>
+    <label name="move_post_number"/>
+    <field name="move_post_number"/>
+    <label name="move"/>
+    <field name="move"/>
+</form>
