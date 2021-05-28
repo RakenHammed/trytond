@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="date"/>
+    <field name="type"/>
+    <field name="party"/>
+    <field name="montant_brut" sum="Montant Brut"/>
+    <field name="montant_retenue" sum="Montant Retenue"/>
+    <field name="montant_net" sum="Montant Net"/>
+    <field name="state"/>
+    <field name="move_post_number"/>
+</tree>
