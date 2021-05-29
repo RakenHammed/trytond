@@ -42,8 +42,8 @@ class Retenue(Workflow, ModelSQL, ModelView):
     'Retenue'
     __name__ = 'retenue_source.retenue'
 
-    type = fields.Many2One('retenue_source.retenue.type',
-                           'Type', states=RETENUE_STATES, required=True)
+    type = fields.Function(fields.Many2One('retenue_source.retenue.type', 'Type', states=RETENUE_STATES,
+            required=True), 'on_change_with_type')
     journal = fields.Many2One(
         'account.journal', 'Journal', states=RETENUE_STATES, required=True)
     date = fields.Date('Date', states=RETENUE_STATES, required=True)
@@ -116,7 +116,6 @@ class Retenue(Workflow, ModelSQL, ModelView):
                 })
 
     def get_move_post_number(self, name):
-        print('[DEBUG]')
         move_post_number = '-pas de mvt-'
         if self.move:
             move_post_number = '-mvt non poste-'
@@ -141,6 +140,13 @@ class Retenue(Workflow, ModelSQL, ModelView):
         else:
             montant_net = 0
         return montant_net
+
+    @fields.depends('party')
+    def on_change_with_type(self, name=None):
+        type_id = None
+        if self.party:
+            type_id = self.party.retenue_type.id
+        return type_id
 
     @classmethod
     def create_move(cls, retenue):
