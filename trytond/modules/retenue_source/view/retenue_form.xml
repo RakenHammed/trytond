@@ -19,12 +19,12 @@
     <label name="state"/>
     <field name="state"/>
     <group col="2" colspan="4" id="buttons_retenue_move">
-        <button string="_Valider les ecritures" name="open" icon="tryton-ok" confirm="si vous confirmez, les écritures comptables seront générées"/>
-        <button string="_Annuler les ecritures" name="cancel" confirm="si vous confirmez, les écritures comptables seront supprimées" icon="tryton-go-previous"/>
-        <button string="_ReValider les ecritures" name="re_open" confirm="si vous confirmez, les écritures comptables seront regénérées" icon="tryton-go-next"/>
+        <button string="Valider les ecritures" name="open" icon="tryton-ok" confirm="si vous confirmez, les écritures comptables seront générées"/>
+        <button string="Annuler les ecritures" name="cancel" confirm="si vous confirmez, les écritures comptables seront supprimées" icon="tryton-undo"/>
+        <button string="ReValider les ecritures" name="re_open" confirm="si vous confirmez, les écritures comptables seront regénérées" icon="tryton-ok"/>
     </group>
     <group col="6" colspan="2" xalign="1.0" xexpand="1"  id="button_delete_retenue">
-        <button colspan="4" string="_Supprimer la retenue" name="to_delete"/>
+        <button colspan="4" icon="tryton-delete" confirm="si vous confirmez, la retenue sera supprimée" string="Supprimer la retenue" name="to_delete"/>
     </group>
     <newline/>
     <label name="move_post_number"/>

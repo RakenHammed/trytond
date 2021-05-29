@@ -43,7 +43,7 @@ class Retenue(Workflow, ModelSQL, ModelView):
     __name__ = 'retenue_source.retenue'
 
     type = fields.Function(fields.Many2One('retenue_source.retenue.type', 'Type', states=RETENUE_STATES,
-            required=True), 'on_change_with_type')
+            required=True), 'on_change_with_type', setter='set_type')
     journal = fields.Many2One(
         'account.journal', 'Journal', states=RETENUE_STATES, required=True)
     date = fields.Date('Date', states=RETENUE_STATES, required=True)
@@ -122,6 +122,10 @@ class Retenue(Workflow, ModelSQL, ModelView):
             if self.move.post_number:
                 move_post_number = self.move.post_number
         return move_post_number
+
+    @classmethod
+    def set_type(cls, instances, name, value):
+        pass
 
     @fields.depends('montant_brut', 'type')
     def on_change_with_montant_retenue(self, name=None):
