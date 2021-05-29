@@ -75,7 +75,7 @@
             <field name="name">Retenue à la source</field>
             <field name="report_name">retenue_source.retenue</field>
             <field name="model">retenue_source.retenue</field>
-            <field name="report">retenue_source/retenue_source.ods</field>
+            <field name="report">retenue_source/retenue_report.ods</field>
             <field name="template_extension">ods</field>
         </record>
         <record model="ir.action.keyword" id="report_retenue_source_keyword">
