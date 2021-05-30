@@ -233,38 +233,38 @@ class RetenueReport(Report):
         User = pool.get('res.user')
         user = User.browse([Transaction().user])
         context = super().get_context(records, header, data)
-        payer_address = cls.get_company_address_formatted(
-            user[0].company.party.addresses[0])
-        beneficiary_address = cls.get_company_address_formatted(
-            records[0].party.addresses[0])
-        montant_brut = context['format_currency'](
-            records[0].montant_brut, user[0].language, user[0].company.currency)
-        montant_net = context['format_currency'](
-            records[0].montant_net, user[0].language, user[0].company.currency)
-        montant_retenue = context['format_currency'](
-                records[0].montant_retenue, user[0].language, user[0].company.currency)
-        context['report_data'] = {
-            'payer_name': user[0].company.party.name,
-            'payer_address': payer_address,
-            'payer_vat_number': user[0].company.party.identifiers[0].code,
-            'payer_code_tva': user[0].company.party.code_tva,
-            'payer_code_categorie': user[0].company.party.code_categorie,
-            'payer_etablissement': user[0].company.party.etablissement,
-            'beneficiary_name': records[0].party.name,
-            'beneficiary_address': beneficiary_address,
-            'beneficiary_identifiant': records[0].party.code_tva or '',
-            'beneficiary_vat_number': records[0].party.identifiers[0].code,
-            'beneficiary_code_tva': records[0].party.code_tva,
-            'beneficiary_code_categorie': records[0].party.code_categorie,
-            'beneficiary_etablissement': records[0].party.etablissement,
-            'retenue_type_short_name': records[0].type.short_name,
-            'retenue_taux': context['format_number'](records[0].type.taux, user[0].language),
-            'montant_brut': montant_brut,
-            'montant_retenue': montant_retenue,
-            'montant_net': montant_net,
-            'date': context['format_date'](records[0].date, user[0].language)
-
-        }
-        context['retenue'] = context['record']
+        for record in records:
+            payer_address = cls.get_company_address_formatted(
+                user[0].company.party.addresses[0])
+            beneficiary_address = cls.get_company_address_formatted(
+                record.party.addresses[0])
+            montant_brut = context['format_currency'](
+                record.montant_brut, user[0].language, user[0].company.currency)
+            montant_net = context['format_currency'](
+                record.montant_net, user[0].language, user[0].company.currency)
+            montant_retenue = context['format_currency'](
+                    record.montant_retenue, user[0].language, user[0].company.currency)
+            record.report_data = {
+                'payer_name': user[0].company.party.name,
+                'payer_address': payer_address,
+                'payer_vat_number': user[0].company.party.identifiers[0].code,
+                'payer_code_tva': user[0].company.party.identifiers[0].code_tva,
+                'payer_code_categorie': user[0].company.party.identifiers[0].code_categorie,
+                'payer_etablissement': user[0].company.party.identifiers[0].etablissement,
+                'beneficiary_name': record.party.name,
+                'beneficiary_address': beneficiary_address,
+                'beneficiary_identifiant': record.party.identifiers[0].code_tva or '',
+                'beneficiary_vat_number': record.party.identifiers[0].code,
+                'beneficiary_code_tva': record.party.identifiers[0].code_tva,
+                'beneficiary_code_categorie': record.party.identifiers[0].code_categorie,
+                'beneficiary_etablissement': record.party.identifiers[0].etablissement,
+                'retenue_type_short_name': record.type.short_name,
+                'retenue_taux': context['format_number'](record.type.taux, user[0].language),
+                'montant_brut': montant_brut,
+                'montant_retenue': montant_retenue,
+                'montant_net': montant_net,
+                'date': context['format_date'](record.date, user[0].language)
+            }
+        context['retenues'] = records
         context['today'] = Date.today()
         return context
