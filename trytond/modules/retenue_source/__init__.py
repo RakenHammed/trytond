@@ -8,6 +8,7 @@ def register():
         retenue_source.RetenueType,
         retenue_source.Retenue,
         party.Party,
+        party.Identifier,
         module='retenue_source', type_='model'
         )
 

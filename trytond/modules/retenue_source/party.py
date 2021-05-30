@@ -8,16 +8,26 @@ from trytond.rpc import RPC
 import json
 
 __all__ = [
-    'Party'
+    'Party',
+    'Identifier',
     ]
+
 
 class Party(ModelSQL, ModelView):
     'Party'
     __name__ = 'party.party'
+
+    retenue_type = fields.Many2One(
+            'retenue_source.retenue.type', 'Type de Retenue par defaut')
+
+
+class Identifier(ModelSQL, ModelView):
+    'Party Identifier'
+    __name__ = 'party.identifier'
+
     code_tva = fields.Char('Code TVA', size=1)
     code_categorie = fields.Char('Code Categorie', size=1)
     etablissement = fields.Char('Etablissement Secondaire', size=3)
-    retenue_type = fields.Many2One('retenue_source.retenue.type', 'Type de Retenue par defaut')
     nature_identifiant = fields.Selection([
         ('mf', 'Matricule fiscal'),
         ('cin', 'Carte d\'identité'),

@@ -3,21 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id=&quot;accounting&quot;]/separator[@id=&quot;account&quot;]" position="before">
-            <separator string="TVA" colspan="4" id="tva"/>
-            <label name="code_tva"/>
-            <field name="code_tva"/>
-            <label name="code_categorie"/>
-            <field name="code_categorie"/>
-            <label name="etablissement"/>
-            <field name="etablissement"/>
-            <label name="retenue_type"/>
-            <field name="retenue_type"/>
-            <label name="nature_identifiant"/>
-            <field name="nature_identifiant"/>
-            <label name="identifiant"/>
-            <field name="identifiant"/>
-            <label name="activite"/>
-            <field name="activite"/>
-            <newline/>
+        <separator string="Retenue à la Source" colspan="4" id="tva"/>
+        <label name="retenue_type"/>
+        <field name="retenue_type"/>
+        <newline/>
     </xpath>
 </data>

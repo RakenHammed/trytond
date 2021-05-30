@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name=&quot;sequence&quot;]" position="after">
+        <label name="nature_identifiant"/>
+        <field name="nature_identifiant"/>
+        <label name="identifiant"/>
+        <field name="identifiant"/>
+        <newline/>
+
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <label name="code_tva"/>
+        <field name="code_tva"/>
+        <label name="code_categorie"/>
+        <field name="code_categorie"/>
+        <label name="etablissement"/>
+        <field name="etablissement"/>
+        <newline/>
+        <label name="activite"/>
+        <field name="activite" xexpand="1"/>
+    </xpath>
+</data>
