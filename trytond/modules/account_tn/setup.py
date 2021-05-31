@@ -35,7 +35,7 @@ version = info.get('version', '0.0.1')
 major_version, minor_version, _ = version.split('.', 2)
 major_version = int(major_version)
 minor_version = int(minor_version)
-name = 'trytond_account_fr'
+name = 'trytond_account_tn'
 
 download_url = 'http://downloads.tryton.org/%s.%s/' % (
     major_version, minor_version)
@@ -72,9 +72,9 @@ if minor_version % 2:
 
 setup(name=name,
     version=version,
-    description='Tryton module with French chart of accounts',
+    description='Tryton module with Tunisian chart of accounts',
     long_description=read('README.rst'),
-    author='Tryton',
+    author='Fares Hantous',
     author_email='bugs@tryton.org',
     url='http://www.tryton.org/',
     download_url=download_url,
@@ -82,59 +82,19 @@ setup(name=name,
         "Bug Tracker": 'https://bugs.tryton.org/',
         "Documentation": 'https://docs.tryton.org/',
         "Forum": 'https://www.tryton.org/forum',
-        "Source Code": 'https://hg.tryton.org/modules/account_fr',
         },
-    keywords='tryton account chart french fec',
-    package_dir={'trytond.modules.account_fr': '.'},
+    keywords='tryton account chart tunisian bilan',
+    package_dir={'trytond.modules.account_tn': '.'},
     packages=(
-        ['trytond.modules.account_fr']
-        + ['trytond.modules.account_fr.%s' % p for p in find_packages()]
+        ['trytond.modules.account_tn']
+        + ['trytond.modules.account_tn.%s' % p for p in find_packages()]
         ),
     package_data={
-        'trytond.modules.account_fr': (info.get('xml', [])
+        'trytond.modules.account_tn': (info.get('xml', [])
             + ['tryton.cfg', 'view/*.xml', 'locale/*.po', 'tests/*.rst',
                 'tests/*.csv']),
         },
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Plugins',
-        'Framework :: Tryton',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Financial and Insurance Industry',
-        'Intended Audience :: Legal Industry',
-        'License :: OSI Approved :: '
-        'GNU General Public License v3 or later (GPLv3+)',
-        'Natural Language :: Bulgarian',
-        'Natural Language :: Catalan',
-        'Natural Language :: Chinese (Simplified)',
-        'Natural Language :: Czech',
-        'Natural Language :: Dutch',
-        'Natural Language :: English',
-        'Natural Language :: Finnish',
-        'Natural Language :: French',
-        'Natural Language :: German',
-        'Natural Language :: Hungarian',
-        'Natural Language :: Indonesian',
-        'Natural Language :: Italian',
-        'Natural Language :: Persian',
-        'Natural Language :: Polish',
-        'Natural Language :: Portuguese (Brazilian)',
-        'Natural Language :: Romanian',
-        'Natural Language :: Russian',
-        'Natural Language :: Slovenian',
-        'Natural Language :: Spanish',
-        'Natural Language :: Turkish',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Topic :: Office/Business',
-        'Topic :: Office/Business :: Financial :: Accounting',
-    ],
+
     license='GPL-3',
     python_requires='>=3.6',
     install_requires=requires,
@@ -142,9 +102,6 @@ setup(name=name,
     zip_safe=False,
     entry_points="""
     [trytond.modules]
-    account_fr = trytond.modules.account_fr
+    account_tn = trytond.modules.account_tn
     """,
-    test_suite='tests',
-    test_loader='trytond.test_loader:Loader',
-    tests_require=tests_require,
     )
