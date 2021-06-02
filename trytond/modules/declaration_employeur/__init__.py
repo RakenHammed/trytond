@@ -9,6 +9,7 @@ def register():
         declaration_employeur.Annexe5Line,
         declaration_employeur.Annexe6Line,
         declaration_employeur.Declaration,
+        declaration_employeur.CreateDeclarationParameters,
         module='declaration_employeur', type_='model'
         )
 
@@ -17,4 +18,7 @@ def register():
         module='declaration_employeur', type_='report'
         )
 
-        
+    Pool.register(
+        declaration_employeur.CreateDeclaration,
+        module='declaration_employeur', type_='wizard'
+        )

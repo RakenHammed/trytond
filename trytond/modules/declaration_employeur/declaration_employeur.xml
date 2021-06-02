@@ -47,6 +47,17 @@
             <field name="type">tree</field>
             <field name="name">annexe6_line_list</field>
         </record>
+        <record model="ir.action.wizard" id="act_create_declaration">
+            <field name="name">Create Declaration</field>
+            <field name="wiz_name">declaration_employeur.create_declaration</field>
+        </record>
+        <menuitem name="Génerer une déclaration employeur automatiquement" parent="menu_declaration" action="act_create_declaration"
+            icon="tryton-launch" id="menu_create_declaration" sequence="10"/>
+        <record model="ir.ui.view" id="create_declaration_parameters_view_form">
+            <field name="model">declaration_employeur.create_declaration.parameters</field>
+            <field name="type">form</field>
+            <field name="name">create_declaration_parameters_form</field>
+        </record>
         <record model="ir.action.report" id="report_declaration_employeur">
             <field name="name">Déclaration employeur</field>
             <field name="report_name">declaration_employeur.declaration</field>

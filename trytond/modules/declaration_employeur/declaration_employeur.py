@@ -5,6 +5,8 @@ from trytond.pyson import Equal, Eval
 import datetime
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.wizard import Wizard, Button, StateAction, StateTransition, StateView
+import time
 
 __all__ = [
     'Annexe1Line',
@@ -1010,6 +1012,7 @@ class Annexe6Line(ModelSQL, ModelView):
         'Retenue Ventes distribution 20mD', digits=(16, 3))
     montant_especes = fields.Numeric('Recouvrement en espèces', digits=(16, 3))
 
+
 class DeclarationReport(Report):
     __name__ = 'declaration_employeur.declaration'
 
@@ -1044,3 +1047,356 @@ class DeclarationReport(Report):
         context['retenues'] = records
         context['today'] = Date.today()
         return context
+
+
+class CreateDeclaration(Wizard):
+    'Create Declaration'
+    __name__ = 'declaration_employeur.create_declaration'
+
+    start = StateView('declaration_employeur.create_declaration.parameters',
+        'declaration_employeur.create_declaration_parameters_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('OK', 'create_declaration', 'tryton-ok', default=True),
+            ])
+    create_declaration = StateTransition()
+    open_declaration = StateAction('declaration_employeur.act_declaration')
+
+    def default_start(self, name):
+        pool = Pool()
+        context = Transaction().context
+        fiscalyear = context.get('fiscalyear') or None
+        today_date = datetime.date.today()
+        return {
+            'fiscalyear': fiscalyear,
+            'from_date': datetime.date(today_date.year, 1, 1),
+            'to_date': today_date,
+            }
+
+    def transition_create_declaration(self):
+        pool = Pool()
+        Declaration = pool.get('declaration_employeur.declaration')
+        Party = pool.get('party.party')
+        Retenue = pool.get('retenue_source.retenue')
+        RetenueType = pool.get('retenue_source.retenue.type')
+        Annexe2Line = pool.get('declaration_employeur.annexe2.line')
+        Annexe5Line = pool.get('declaration_employeur.annexe5.line')
+
+        assiette_010 = retenue_010 = Decimal('0')
+        assiette_021 = retenue_021 = Decimal('0')
+        assiette_022 = retenue_022 = Decimal('0')
+        assiette_023 = retenue_023 = Decimal('0')
+        assiette_024 = retenue_024 = Decimal('0')
+        assiette_030 = retenue_030 = Decimal('0')
+        assiette_040 = retenue_040 = Decimal('0')
+        assiette_051 = retenue_051 = Decimal('0')
+        assiette_052 = retenue_052 = Decimal('0')
+        assiette_060 = retenue_060 = Decimal('0')
+        assiette_071 = retenue_071 = Decimal('0')
+        assiette_072 = retenue_072 = Decimal('0')
+        assiette_073 = retenue_073 = Decimal('0')
+        assiette_074 = retenue_074 = Decimal('0')
+        assiette_080 = retenue_080 = Decimal('0')
+        assiette_091 = retenue_091 = Decimal('0')
+        assiette_092 = retenue_092 = Decimal('0')
+        assiette_093 = retenue_093 = Decimal('0')
+        assiette_094 = retenue_094 = Decimal('0')
+        assiette_100 = retenue_100 = Decimal('0')
+        assiette_110 = retenue_110 = Decimal('0')
+        assiette_121 = retenue_121 = Decimal('0')
+        assiette_122 = retenue_122 = Decimal('0')
+        assiette_123 = retenue_123 = Decimal('0')
+        assiette_131 = retenue_131 = Decimal('0')
+        assiette_132 = retenue_132 = Decimal('0')
+        assiette_140 = retenue_140 = Decimal('0')
+        assiette_150 = retenue_150 = Decimal('0')
+        assiette_160 = retenue_160 = Decimal('0')
+
+        declaration = Declaration.create([{
+            'fiscalyear': self.start.fiscalyear.id,
+            'code_acte': '0',
+            'description': time.strftime('%d-%m-%Y %H:%M', time.localtime())
+            }])
+        parties = Party.search([])
+        retenue_types = RetenueType.search([])
+        for party in parties:
+            for retenue_type in retenue_types:
+                retenues = Retenue.search([
+                    ('party', '=', party.id),
+                    ('type', '=', retenue_type.id),
+                    ('date', '>=', self.start.from_date),
+                    ('date', '<=', self.start.from_date),
+                    ])
+                montant_brut = Decimal('0')
+                montant_retenue = Decimal('0')
+                montant_net = Decimal('0')
+                for retenue in retenues:
+                    montant_brut += retenue.montant_brut
+                    montant_retenue += retenue.montant_retenue
+                    montant_net += retenue.montant_net
+                if montant_retenue:
+                    if retenue_type.code[:2] == '01':
+                        self.raise_user_error('retenue de type 1 !!!:')
+                    elif retenue_type.code[:2] == '02':
+                        self.raise_user_error('retenue de type 2 !!!:')
+                    elif retenue_type.code[:3] == '03a':
+                        assiette_021 += montant_brut
+                        retenue_021 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_honoraires': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '03b':
+                        assiette_021 += montant_brut
+                        retenue_021 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_honoraires': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '03c':
+                        assiette_023 += montant_brut
+                        retenue_023 += montant_retenue
+                    elif retenue_type.code[:3] == '03d':
+                        assiette_023 += montant_brut
+                        retenue_023 += montant_retenue
+                    elif retenue_type.code[:2] == '04':
+                        assiette_030 += montant_brut
+                        retenue_030 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_rr': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:2] == '05':
+                        self.raise_user_error('retenue de type 5 !!!:')
+                    elif retenue_type.code[:2] == '06':
+                        assiette_040 += montant_brut
+                        retenue_040 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_hotels': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '071':
+                        assiette_051 += montant_brut
+                        retenue_051 += montant_retenue
+                    elif retenue_type.code[:3] == '072':
+                        assiette_051 += montant_brut
+                        retenue_051 += montant_retenue
+                    elif retenue_type.code[:2] == '08':
+                        assiette_060 += montant_brut
+                        retenue_060 += montant_retenue
+                    elif retenue_type.code[:3] == '091':
+                        assiette_071 += montant_brut
+                        retenue_071 += montant_retenue
+                    elif retenue_type.code[:3] == '092':
+                        assiette_071 += montant_brut
+                        retenue_071 += montant_retenue
+                    elif retenue_type.code[:3] == '093':
+                        assiette_073 += montant_brut
+                        retenue_073 += montant_retenue
+                    elif retenue_type.code[:3] == '094':
+                        assiette_073 += montant_brut
+                        retenue_073 += montant_retenue
+                    elif retenue_type.code[:2] == '10':
+                        assiette_080 += montant_brut
+                        retenue_080 += montant_retenue
+                    elif retenue_type.code[:3] == '11a':
+                        assiette_091 += montant_brut
+                        retenue_091 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_jetons': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '11b':
+                        assiette_091 += montant_brut
+                        retenue_091 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_jetons': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '11c':
+                        assiette_093 += montant_brut
+                        retenue_093 += montant_retenue
+                    elif retenue_type.code[:3] == '11d':
+                        assiette_093 += montant_brut
+                        retenue_093 += montant_retenue
+                    elif retenue_type.code[:2] == '12':
+                        assiette_100 += montant_brut
+                        retenue_100 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_remunerations': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:2] == '13':
+                        assiette_110 += montant_brut
+                        retenue_110 += montant_retenue
+                    elif retenue_type.code[:3] == '14a':
+                        assiette_121 += montant_brut
+                        retenue_121 += montant_retenue
+                        Annexe2Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'type_montant': '1',
+                            'montant_plusvalue': montant_brut,
+                            'type_montant_exportation': '0',
+                            'montant_retenues': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '14b':
+                        assiette_122 += montant_brut
+                        retenue_122 += montant_retenue
+                    elif retenue_type.code[:3] == '14c':
+                        assiette_123 += montant_brut
+                        retenue_123 += montant_retenue
+                    elif retenue_type.code[:3] == '15a':
+                        assiette_132 += montant_brut
+                        retenue_132 += montant_retenue
+                        Annexe5Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'montant_1000_autres': montant_brut,
+                            'montant_ret_1000_autres': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '15b':
+                        assiette_132 += montant_brut
+                        retenue_132 += montant_retenue
+                        Annexe5Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'montant_1000_autres': montant_brut,
+                            'montant_ret_1000_autres': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:2] == '16':
+                        assiette_140 += montant_brut
+                        retenue_140 += montant_retenue
+                        Annexe5Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'montant_1000_public': montant_brut,
+                            'montant_ret_1000_public': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:2] == '17':
+                        assiette_150 += montant_brut
+                        retenue_150 += montant_retenue
+                        Annexe5Line.create([{
+                            'declaration': declaration,
+                            'party': party.id,
+                            'montant_marches_nonresidents': montant_brut,
+                            'montant_ret_marches_nonresidents': montant_retenue,
+                            'montant_net': montant_net,
+                            }])
+                    elif retenue_type.code[:3] == '18':
+                        assiette_160 += montant_brut
+                        retenue_160 += montant_retenue
+                    elif retenue_type.code[:3] == '19a':
+                        self.raise_user_error('retenue de type 19a !!!:')
+                    elif retenue_type.code[:3] == '19b':
+                        self.raise_user_error('retenue de type 19b !!!:')
+                    else:
+                        self.raise_user_error(
+                            'il existe des retenues de type non pris en compte !')
+        Declaration.write(declaration, {
+            'assiette_010': assiette_010,
+            'retenue_010': retenue_010,
+            'assiette_021': assiette_021,
+            'retenue_021': retenue_021,
+            'assiette_023': assiette_023,
+            'retenue_023': retenue_023,
+            'assiette_030': assiette_030,
+            'retenue_030': retenue_030,
+            'assiette_040': assiette_040,
+            'retenue_040': retenue_040,
+            'assiette_051': assiette_051,
+            'retenue_051': retenue_051,
+            'assiette_060': assiette_060,
+            'retenue_060': retenue_060,
+            'assiette_071': assiette_071,
+            'retenue_071': retenue_071,
+            'assiette_073': assiette_073,
+            'retenue_073': retenue_073,
+            'assiette_080': assiette_080,
+            'retenue_080': retenue_080,
+            'assiette_091': assiette_091,
+            'retenue_091': retenue_091,
+            'assiette_093': assiette_093,
+            'retenue_093': retenue_093,
+            'assiette_100': assiette_100,
+            'retenue_100': retenue_100,
+            'assiette_110': assiette_110,
+            'retenue_110': retenue_110,
+            'assiette_121': assiette_121,
+            'retenue_121': retenue_121,
+            'assiette_122': assiette_122,
+            'retenue_122': retenue_122,
+            'assiette_123': assiette_123,
+            'retenue_123': retenue_123,
+            'assiette_131': assiette_131,
+            'retenue_131': retenue_131,
+            'assiette_132': assiette_132,
+            'retenue_132': retenue_132,
+            'assiette_140': assiette_140,
+            'retenue_140': retenue_140,
+            'assiette_150': assiette_150,
+            'retenue_150': retenue_150,
+            'assiette_160': assiette_160,
+            'retenue_160': retenue_160,
+            })
+
+        # Ajouter les numeros dordre aux lignes des annexes
+        lines_2 = Annexe2Line.search([('declaration', '=', declaration[0].id)])
+        ordre_2 = 0
+        for line in lines_2:
+            ordre_2 += 1
+            Annexe2Line.write(line, {'ordre': ordre_2})
+        lines_5 = Annexe5Line.search([('declaration', '=', declaration[0].id)])
+        ordre_5 = 0
+        for line in lines_5:
+            ordre_5 += 1
+            Annexe5Line.write(line, {'ordre': ordre_5})
+        return 'open_declaration'
+
+
+class CreateDeclarationParameters(ModelView):
+    'Create Declaration Parameters'
+    __name__ = 'declaration_employeur.create_declaration.parameters'
+
+    fiscalyear = fields.Many2One('account.fiscalyear', 'Fiscal Year',
+            required=True)
+    from_date = fields.Date('From Date', required=True)
+    to_date = fields.Date('To Date', required=True)
