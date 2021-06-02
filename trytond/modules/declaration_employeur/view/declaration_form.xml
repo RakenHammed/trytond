@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<form col="14">
+    <label name="fiscalyear"/>
+    <field name="fiscalyear"/>
+    <label name="code_acte"/>
+    <field name="code_acte"/>
+    <label name="description"/>
+    <field name="description" colspan="9"/>
+    <newline/>
+    <label name="presence_anx1"/>
+    <field name="presence_anx1"/>
+    <label name="presence_anx2"/>
+    <field name="presence_anx2"/>
+    <label name="presence_anx3"/>
+    <field name="presence_anx3"/>
+    <label name="presence_anx4"/>
+    <field name="presence_anx4"/>
+    <label name="presence_anx5"/>
+    <field name="presence_anx5"/>
+    <label name="presence_anx6"/>
+    <field name="presence_anx6"/>
+    <label name="presence_anx7"/>
+    <field name="presence_anx7"/>
+    <notebook colspan="14">
+        <page colspan="8" string="Recap" id="recap">
+            <label string="Libellés"/>
+            <label string="Assiette de la retenue"/>
+            <label string="Taux"/>
+            <label string="Montant de la retenue"/>
+            <newline/>
+            <label name="assiette_010"/>
+            <field name="assiette_010"/>
+            <label name="retenue_010" string="000.00"/>
+            <field name="retenue_010"/>
+            <newline/>
+            <label name="assiette_170"/>
+            <field name="assiette_170"/>
+            <label name="retenue_170" string="000.00"/>
+            <field name="retenue_170"/>
+            <newline/>
+            <label name="retenue_300" colspan="3"/>
+            <field name="retenue_300"/>
+            <newline/>
+            <label name="retenue_400" colspan="3"/>
+            <field name="retenue_400"/>
+            <newline/>
+            <label name="assiette_021"/>
+            <field name="assiette_021"/>
+            <label name="retenue_021" string="015.00"/>
+            <field name="retenue_021"/>
+            <newline/>
+            <label name="assiette_023"/>
+            <field name="assiette_023"/>
+            <label name="retenue_023" string="015.00"/>
+            <field name="retenue_023"/>
+            <newline/>
+            <label name="assiette_025"/>
+            <field name="assiette_025"/>
+            <label name="retenue_025" string="005.00"/>
+            <field name="retenue_025"/>
+            <newline/>
+            <label name="assiette_030"/>
+            <field name="assiette_030"/>
+            <label name="retenue_030" string="005.00"/>
+            <field name="retenue_030"/>
+            <newline/>
+            <label name="assiette_180"/>
+            <field name="assiette_180"/>
+            <label name="retenue_180" string="002.50"/>
+            <field name="retenue_180"/>
+            <newline/>
+            <label name="assiette_040"/>
+            <field name="assiette_040"/>
+            <label name="retenue_040" string="005.00"/>
+            <field name="retenue_040"/>
+            <newline/>
+            <label name="assiette_260"/>
+            <field name="assiette_260"/>
+            <label name="retenue_260" string="020.00"/>
+            <field name="retenue_260"/>
+            <newline/>
+            <label name="assiette_060"/>
+            <field name="assiette_060"/>
+            <label name="retenue_060" string="015.00"/>
+            <field name="retenue_060"/>
+            <newline/>
+            <label name="assiette_071"/>
+            <field name="assiette_071"/>
+            <label name="retenue_071" string="020.00"/>
+            <field name="retenue_071"/>
+            <newline/>
+            <label name="assiette_073"/>
+            <field name="assiette_073"/>
+            <label name="retenue_073" string="020.00"/>
+            <field name="retenue_073"/>
+            <newline/>
+            <label name="assiette_080"/>
+            <field name="assiette_080"/>
+            <label name="retenue_080" string="020.00"/>
+            <field name="retenue_080"/>
+            <newline/>
+            <label name="assiette_241"/>
+            <field name="assiette_241"/>
+            <label name="retenue_241" string="000.00"/>
+            <field name="retenue_241"/>
+            <newline/>
+            <label name="assiette_242"/>
+            <field name="assiette_242"/>
+            <label name="retenue_242" string="000.00"/>
+            <field name="retenue_242"/>
+            <newline/>
+            <label name="assiette_091"/>
+            <field name="assiette_091"/>
+            <label name="retenue_091" string="020.00"/>
+            <field name="retenue_091"/>
+            <newline/>
+            <label name="assiette_093"/>
+            <field name="assiette_093"/>
+            <label name="retenue_093" string="020.00"/>
+            <field name="retenue_093"/>
+            <newline/>
+            <label name="assiette_100"/>
+            <field name="assiette_100"/>
+            <label name="retenue_100" string="015.00"/>
+            <field name="retenue_100"/>
+            <newline/>
+            <label name="assiette_110"/>
+            <field name="assiette_110"/>
+            <label name="retenue_110" string="002.50"/>
+            <field name="retenue_110"/>
+            <newline/>
+            <label name="assiette_121"/>
+            <field name="assiette_121"/>
+            <label name="retenue_121" string="002.50"/>
+            <field name="retenue_121"/>
+            <newline/>
+            <label name="assiette_122"/>
+            <field name="assiette_122"/>
+            <label name="retenue_122" string="002.50"/>
+            <field name="retenue_122"/>
+            <newline/>
+            <label name="assiette_123"/>
+            <field name="assiette_123"/>
+            <label name="retenue_123" string="015.00"/>
+            <field name="retenue_123"/>
+            <newline/>
+            <label name="assiette_131"/>
+            <field name="assiette_131"/>
+            <label name="retenue_131" string="015.00"/>
+            <field name="retenue_131"/>
+            <newline/>
+            <label name="assiette_132"/>
+            <field name="assiette_132"/>
+            <label name="retenue_132" string="015.00"/>
+            <field name="retenue_132"/>
+            <newline/>
+            <label name="assiette_140"/>
+            <field name="assiette_140"/>
+            <label name="retenue_140" string="050.00"/>
+            <field name="retenue_140"/>
+            <newline/>
+            <label name="assiette_150"/>
+            <field name="assiette_150"/>
+            <label name="retenue_150" string="100.00"/>
+            <field name="retenue_150"/>
+            <newline/>
+            <label name="assiette_160"/>
+            <field name="assiette_160"/>
+            <label name="retenue_160" string="000.00"/>
+            <field name="retenue_160"/>
+            <newline/>
+            <label name="assiette_270"/>
+            <field name="assiette_270"/>
+            <label name="retenue_270" string="025.00"/>
+            <field name="retenue_270"/>
+            <newline/>
+            <label name="assiette_271"/>
+            <field name="assiette_271"/>
+            <label name="retenue_271" string="015.00"/>
+            <field name="retenue_271"/>
+            <newline/>
+            <label name="assiette_200"/>
+            <field name="assiette_200"/>
+            <label name="retenue_200" string="001.00"/>
+            <field name="retenue_200"/>
+            <newline/>
+            <label name="assiette_191"/>
+            <field name="assiette_191"/>
+            <label name="retenue_191" string="010.00"/>
+            <field name="retenue_191"/>
+            <newline/>
+            <label name="assiette_192"/>
+            <field name="assiette_192"/>
+            <label name="retenue_192" string="030.00"/>
+            <field name="retenue_192"/>
+            <newline/>
+            <label name="assiette_051"/>
+            <field name="assiette_051"/>
+            <label name="retenue_051" string="015.00"/>
+            <field name="retenue_051"/>
+            <newline/>
+            <label name="assiette_210"/>
+            <field name="assiette_210"/>
+            <label name="retenue_210" string="000.00"/>
+            <field name="retenue_210"/>
+            <newline/>
+            <label name="assiette_220"/>
+            <field name="assiette_220"/>
+            <label name="retenue_220" string="025.00"/>
+            <field name="retenue_220"/>
+            <newline/>
+            <label name="assiette_250"/>
+            <field name="assiette_250"/>
+            <label name="retenue_250" string="000.00"/>
+            <field name="retenue_250"/>
+            <newline/>
+            <label name="assiette_280"/>
+            <field name="assiette_280"/>
+            <label name="retenue_280" string="025.00"/>
+            <field name="retenue_280"/>
+            <newline/>
+            <label name="assiette_290"/>
+            <field name="assiette_290"/>
+            <label name="retenue_290" string="003.00"/>
+            <field name="retenue_290"/>
+            <newline/>
+            <label name="assiettes_total"/>
+            <field name="assiettes_total"/>
+            <label name="retenues_total" string="000.00"/>
+            <field name="retenues_total"/>
+        </page>
+        <page string="Annexe 1" id="annexe1">
+            <field name="annexe1_lines" view_ids="declaration_employeur.annexe1_line_list"/>
+        </page>
+        <page string="Annexe 2" id="annexe2">
+            <field name="annexe2_lines" view_ids="declaration_employeur.annexe2_line_list"/>
+        </page>
+        <page string="Annexe 5" id="annexe5">
+            <field name="annexe5_lines" view_ids="declaration_employeur.annexe5_line_list"/>
+        </page>
+        <page string="Annexe 6" id="annexe6">
+            <field name="annexe6_lines" view_ids="declaration_employeur.annexe6_line_list"/>
+        </page>
+    </notebook>
+</form>
