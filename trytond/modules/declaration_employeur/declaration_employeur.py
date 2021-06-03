@@ -6,6 +6,7 @@ import datetime
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, Button, StateAction, StateTransition, StateView
+from trytond.exceptions import UserError
 import time
 
 __all__ = [
@@ -204,7 +205,16 @@ class Declaration(ModelSQL, ModelView):
             'get_assiettes_total', 'set_assiettes_total')
     retenues_total = fields.Function(fields.Numeric('retenue', digits=(16, 3)),
             'get_retenues_total', 'set_retenues_total')
+    
+    @classmethod
+    def __setup__(cls):
+        super(Declaration, cls).__setup__()
+        cls._order.insert(0, ('description', 'DESC'))
 
+    @classmethod
+    def default_description(cls):
+        return time.strftime('%d-%m-%Y %H:%M', time.localtime())
+    
     @classmethod
     def default_assiette_010(cls):
         return 0
@@ -928,21 +938,68 @@ class Annexe2Line(ModelSQL, ModelView):
     montant_retenues = fields.Numeric('Retenues', digits=(16, 3))
     montant_conpensation = fields.Numeric(
         'Caisse de conpensation', digits=(16, 3))
-    montant_net = fields.Function(fields.Numeric('Net servi', digits=(16, 3),
-            on_change_with=[]), 'on_change_with_montant_net')
+    montant_net = fields.Numeric('Net servi', digits=(16, 3))
 
     # TODO
     # def __init__(self):
     #     super(Annexe2Line, self).__init__()
     #     self._order.insert(0, ('ordre', 'ASC'))
 
+    @classmethod
+    def default_montant_honoraires(cls):
+        return 0
+
+    @classmethod
+    def default_montant_rr(cls):
+        return 0
+
+    @classmethod
+    def default_montant_jetons(cls):
+        return 0
+
+    @classmethod
+    def default_montant_remunerations(cls):
+        return 0
+
+    @classmethod
+    def default_montant_plusvalue(cls):
+        return 0
+
+    @classmethod
+    def default_montant_hotels(cls):
+        return 0
+
+    @classmethod
+    def default_montant_artistes(cls):
+        return 0
+
+    @classmethod
+    def default_montant_bureaux_exportateurs(cls):
+        return 0
+
+    @classmethod
+    def default_montant_honoraires_exportation(cls):
+        return 0
+
+    @classmethod
+    def default_montant_retenues(cls):
+        return 0
+
+    @classmethod
+    def default_montant_net(cls):
+        return 0
+
+    @classmethod
+    def default_montant_conpensation(cls):
+        return 0
+
     @fields.depends('montant_honoraires', 'montant_rr', 'montant_jetons',
             'montant_remunerations', 'montant_plusvalue', 'montant_hotels',
             'montant_artistes', 'montant_bureaux_exportateurs', 'montant_retenues')
     def on_change_with_montant_net(self, name=None):
-        montant_net = self.mnt_honoraires + self.montant_rr + self.montant_jetons + \
+        montant_net = self.montant_honoraires + self.montant_rr + self.montant_jetons + \
             self.montant_remunerations + self.montant_plusvalue + self.montant_hotels + \
-            self.montant_artistes + self.montant_bureaux_exportateurs - self.mnt_retenues
+            self.montant_artistes + self.montant_bureaux_exportateurs - self.montant_retenues
         return montant_net
 
 
@@ -972,8 +1029,43 @@ class Annexe5Line(ModelSQL, ModelView):
         'Retenues Marches avec non résidents', digits=(16, 3))
     montant_conpensation = fields.Numeric(
         'Brut Caisse Conpensation', digits=(16, 3))
-    montant_net = fields.Function(fields.Numeric(
-        'Net servi', digits=(16, 3)), 'on_change_with_montant_net')
+    montant_net = fields.Numeric('Net servi', digits=(16, 3))
+
+    @classmethod
+    def default_montant_1000_export_IS10(cls):
+        return 0
+
+    @classmethod
+    def default_montant_ret_1000_export_IS10(cls):
+        return 0
+
+    @classmethod
+    def default_montant_1000_autres(cls):
+        return 0
+
+    @classmethod
+    def default_montant_ret_1000_autres(cls):
+        return 0
+
+    @classmethod
+    def default_montant_1000_public(cls):
+        return 0
+
+    @classmethod
+    def default_montant_ret_1000_public(cls):
+        return 0
+
+    @classmethod
+    def default_montant_conpensation(cls):
+        return 0
+
+    @classmethod
+    def default_montant_marches_nonresidents(cls):
+        return 0
+
+    @classmethod
+    def default_montant_ret_marches_nonresidents(cls):
+        return 0
 
     @fields.depends('montant_1000_export_IS10', 'montant_ret_1000_export_IS10',
         'montant_1000_autres', 'montant_ret_1000_autres',
@@ -1059,7 +1151,7 @@ class CreateDeclaration(Wizard):
             Button('OK', 'create_declaration', 'tryton-ok', default=True),
             ])
     create_declaration = StateTransition()
-    open_declaration = StateAction('declaration_employeur.act_declaration')
+    open_declaration = StateAction('declaration_employeur.act_declaration_create')
 
     def default_start(self, name):
         pool = Pool()
@@ -1115,7 +1207,7 @@ class CreateDeclaration(Wizard):
             'fiscalyear': self.start.fiscalyear.id,
             'code_acte': '0',
             'description': time.strftime('%d-%m-%Y %H:%M', time.localtime())
-            }])
+            }])[0]
         parties = Party.search([])
         retenue_types = RetenueType.search([])
         for party in parties:
@@ -1124,7 +1216,7 @@ class CreateDeclaration(Wizard):
                     ('party', '=', party.id),
                     ('type', '=', retenue_type.id),
                     ('date', '>=', self.start.from_date),
-                    ('date', '<=', self.start.from_date),
+                    ('date', '<=', self.start.to_date),
                     ])
                 montant_brut = Decimal('0')
                 montant_retenue = Decimal('0')
@@ -1135,14 +1227,14 @@ class CreateDeclaration(Wizard):
                     montant_net += retenue.montant_net
                 if montant_retenue:
                     if retenue_type.code[:2] == '01':
-                        self.raise_user_error('retenue de type 1 !!!:')
+                        raise UserError('Retenue de type 1 !!!')
                     elif retenue_type.code[:2] == '02':
-                        self.raise_user_error('retenue de type 2 !!!:')
+                        raise UserError('Retenue de type 2 !!!:')
                     elif retenue_type.code[:3] == '03a':
                         assiette_021 += montant_brut
                         retenue_021 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_honoraires': montant_brut,
@@ -1154,7 +1246,7 @@ class CreateDeclaration(Wizard):
                         assiette_021 += montant_brut
                         retenue_021 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_honoraires': montant_brut,
@@ -1172,7 +1264,7 @@ class CreateDeclaration(Wizard):
                         assiette_030 += montant_brut
                         retenue_030 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_rr': montant_brut,
@@ -1181,12 +1273,12 @@ class CreateDeclaration(Wizard):
                             'montant_net': montant_net,
                             }])
                     elif retenue_type.code[:2] == '05':
-                        self.raise_user_error('retenue de type 5 !!!:')
+                        raise UserError('retenue de type 5 !!!:')
                     elif retenue_type.code[:2] == '06':
                         assiette_040 += montant_brut
                         retenue_040 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_hotels': montant_brut,
@@ -1222,7 +1314,7 @@ class CreateDeclaration(Wizard):
                         assiette_091 += montant_brut
                         retenue_091 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_jetons': montant_brut,
@@ -1234,7 +1326,7 @@ class CreateDeclaration(Wizard):
                         assiette_091 += montant_brut
                         retenue_091 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_jetons': montant_brut,
@@ -1252,7 +1344,7 @@ class CreateDeclaration(Wizard):
                         assiette_100 += montant_brut
                         retenue_100 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_remunerations': montant_brut,
@@ -1267,7 +1359,7 @@ class CreateDeclaration(Wizard):
                         assiette_121 += montant_brut
                         retenue_121 += montant_retenue
                         Annexe2Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'type_montant': '1',
                             'montant_plusvalue': montant_brut,
@@ -1285,7 +1377,7 @@ class CreateDeclaration(Wizard):
                         assiette_132 += montant_brut
                         retenue_132 += montant_retenue
                         Annexe5Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'montant_1000_autres': montant_brut,
                             'montant_ret_1000_autres': montant_retenue,
@@ -1295,7 +1387,7 @@ class CreateDeclaration(Wizard):
                         assiette_132 += montant_brut
                         retenue_132 += montant_retenue
                         Annexe5Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'montant_1000_autres': montant_brut,
                             'montant_ret_1000_autres': montant_retenue,
@@ -1305,7 +1397,7 @@ class CreateDeclaration(Wizard):
                         assiette_140 += montant_brut
                         retenue_140 += montant_retenue
                         Annexe5Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'montant_1000_public': montant_brut,
                             'montant_ret_1000_public': montant_retenue,
@@ -1315,7 +1407,7 @@ class CreateDeclaration(Wizard):
                         assiette_150 += montant_brut
                         retenue_150 += montant_retenue
                         Annexe5Line.create([{
-                            'declaration': declaration,
+                            'declaration': declaration.id,
                             'party': party.id,
                             'montant_marches_nonresidents': montant_brut,
                             'montant_ret_marches_nonresidents': montant_retenue,
@@ -1325,13 +1417,13 @@ class CreateDeclaration(Wizard):
                         assiette_160 += montant_brut
                         retenue_160 += montant_retenue
                     elif retenue_type.code[:3] == '19a':
-                        self.raise_user_error('retenue de type 19a !!!:')
+                        raise UserError('retenue de type 19a !!!:')
                     elif retenue_type.code[:3] == '19b':
-                        self.raise_user_error('retenue de type 19b !!!:')
+                        raise UserError('retenue de type 19b !!!:')
                     else:
-                        self.raise_user_error(
+                        raise UserError(
                             'il existe des retenues de type non pris en compte !')
-        Declaration.write(declaration, {
+        Declaration.write([declaration], {
             'assiette_010': assiette_010,
             'retenue_010': retenue_010,
             'assiette_021': assiette_021,
@@ -1379,12 +1471,12 @@ class CreateDeclaration(Wizard):
             })
 
         # Ajouter les numeros dordre aux lignes des annexes
-        lines_2 = Annexe2Line.search([('declaration', '=', declaration[0].id)])
+        lines_2 = Annexe2Line.search([('declaration', '=', declaration.id)])
         ordre_2 = 0
         for line in lines_2:
             ordre_2 += 1
-            Annexe2Line.write(line, {'ordre': ordre_2})
-        lines_5 = Annexe5Line.search([('declaration', '=', declaration[0].id)])
+            Annexe2Line.write([line], {'ordre': ordre_2})
+        lines_5 = Annexe5Line.search([('declaration', '=', declaration.id)])
         ordre_5 = 0
         for line in lines_5:
             ordre_5 += 1
