@@ -22,11 +22,11 @@
     <label name="presence_anx7"/>
     <field name="presence_anx7"/>
     <notebook colspan="14">
-        <page colspan="8" string="Recap" id="recap">
-            <label string="Libellés"/>
-            <label string="Assiette de la retenue"/>
-            <label string="Taux"/>
-            <label string="Montant de la retenue"/>
+        <page string="Recap" id="recap">
+            <label id="declaration_libellés" string="Libellés"/>
+            <label id="declaration_assiette_retenue" string="Assiette de la retenue"/>
+            <label id="declaration_taux" string="Taux"/>
+            <label id="declaration_montant_retenue" string="Montant de la retenue"/>
             <newline/>
             <label name="assiette_010"/>
             <field name="assiette_010"/>
