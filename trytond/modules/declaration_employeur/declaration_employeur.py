@@ -1151,7 +1151,7 @@ class CreateDeclaration(Wizard):
             Button('OK', 'create_declaration', 'tryton-ok', default=True),
             ])
     create_declaration = StateTransition()
-    open_declaration = StateAction('declaration_employeur.act_declaration_create')
+    open_declaration = StateAction('declaration_employeur.act_declaration')
 
     def default_start(self, name):
         pool = Pool()
@@ -1480,7 +1480,7 @@ class CreateDeclaration(Wizard):
         ordre_5 = 0
         for line in lines_5:
             ordre_5 += 1
-            Annexe5Line.write(line, {'ordre': ordre_5})
+            Annexe5Line.write([line], {'ordre': ordre_5})
         return 'open_declaration'
 
 
