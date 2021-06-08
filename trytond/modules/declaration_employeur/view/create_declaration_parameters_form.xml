@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form>
+    <label name="fiscalyear" string="Fiscal Year"/>
+    <field name="fiscalyear"/>
+    <label name="from_date"/>
+    <field name="from_date"/>
+    <label name="to_date"/>
+    <field name="to_date"/>
+</form>

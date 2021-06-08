@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="declaration_view_form">
+            <field name="model">declaration_employeur.declaration</field>
+            <field name="type">form</field>
+            <field name="name">declaration_form</field>
+        </record>
+        <record model="ir.ui.view" id="declaration_view_list">
+            <field name="model">declaration_employeur.declaration</field>
+            <field name="type">tree</field>
+            <field name="name">declaration_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_declaration">
+            <field name="name">Declaration employeur</field>
+            <field name="res_model">declaration_employeur.declaration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_declaration_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="declaration_view_list"/>
+            <field name="act_window" ref="act_declaration"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_declaration_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="declaration_view_form"/>
+            <field name="act_window" ref="act_declaration"/>
+        </record>
+        <menuitem name="Déclarations employeur" id="menu_declaration"/>
+        <menuitem name="Déclarations employeur" parent="menu_declaration" id="menu_toutes_declarations" sequence="20" action="act_declaration"/>
+        <record model="ir.ui.view" id="annexe1_line_list">
+            <field name="model">declaration_employeur.annexe1.line</field>
+            <field name="type">tree</field>
+            <field name="name">annexe1_line_list</field>
+        </record>
+        <record model="ir.ui.view" id="annexe2_line_list">
+            <field name="model">declaration_employeur.annexe2.line</field>
+            <field name="type">tree</field>
+            <field name="name">annexe2_line_list</field>
+        </record>
+        <record model="ir.ui.view" id="annexe5_line_list">
+            <field name="model">declaration_employeur.annexe5.line</field>
+            <field name="type">tree</field>
+            <field name="name">annexe5_line_list</field>
+        </record>
+        <record model="ir.ui.view" id="annexe6_line_list">
+            <field name="model">declaration_employeur.annexe6.line</field>
+            <field name="type">tree</field>
+            <field name="name">annexe6_line_list</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_declaration">
+            <field name="name">Create Declaration</field>
+            <field name="wiz_name">declaration_employeur.create_declaration</field>
+        </record>
+        <menuitem name="Génerer une déclaration employeur automatiquement" parent="menu_declaration" action="act_create_declaration"
+            icon="tryton-launch" id="menu_create_declaration" sequence="10"/>
+        <record model="ir.ui.view" id="create_declaration_parameters_view_form">
+            <field name="model">declaration_employeur.create_declaration.parameters</field>
+            <field name="type">form</field>
+            <field name="name">create_declaration_parameters_form</field>
+        </record>
+        <record model="ir.action.report" id="report_declaration_employeur">
+            <field name="name">Déclaration employeur</field>
+            <field name="report_name">declaration_employeur.declaration</field>
+            <field name="model">declaration_employeur.declaration</field>
+            <field name="report">declaration_employeur/declaration_report.odt</field>
+            <field name="template_extension">odt</field>
+        </record>
+        <record model="ir.action.keyword" id="report_declaration_employeur_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">declaration_employeur.declaration,-1</field>
+            <field name="action" ref="report_declaration_employeur"/>
+        </record>
+    </data>
+</tryton>

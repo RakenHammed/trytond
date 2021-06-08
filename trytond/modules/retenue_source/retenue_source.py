@@ -42,8 +42,8 @@ class Retenue(Workflow, ModelSQL, ModelView):
     'Retenue'
     __name__ = 'retenue_source.retenue'
 
-    type = fields.Function(fields.Many2One('retenue_source.retenue.type', 'Type', states=RETENUE_STATES,
-            required=True), 'on_change_with_type', setter='set_type')
+    type = fields.Many2One('retenue_source.retenue.type', 'Type', states=RETENUE_STATES,
+            required=True)
     journal = fields.Many2One(
         'account.journal', 'Journal', states=RETENUE_STATES, required=True)
     date = fields.Date('Date', states=RETENUE_STATES, required=True)
@@ -51,12 +51,10 @@ class Retenue(Workflow, ModelSQL, ModelView):
             required=True)
     montant_brut = fields.Numeric('Montant Brut', digits=(16, 3), states=RETENUE_STATES,
             required=True)
-    montant_retenue = fields.Function(fields.Numeric(
-        'Montant Retenue', digits=(16, 3)), 'on_change_with_montant_retenue')
-    montant_net = fields.Function(fields.Numeric('Montant Net', digits=(16, 3)),
-     'on_change_with_montant_net')
+    montant_retenue = fields.Numeric('Montant Retenue', digits=(16, 3))
+    montant_net = fields.Numeric('Montant Net', digits=(16, 3))
     move = fields.Many2One('account.move', 'Mouvement',
-                           ondelete='SET NULL', readonly=True)
+                         ondelete='SET NULL', readonly=True)
     move_post_number = fields.Function(fields.Char(
         'Reference Mouvement'), 'get_move_post_number')
 
@@ -82,6 +80,18 @@ class Retenue(Workflow, ModelSQL, ModelView):
         if retenues and len(retenues) > 0:
             journal_id = retenues[0].journal.id
         return journal_id
+
+    @classmethod
+    def default_montant_brut(cls):
+        return 0
+
+    @classmethod
+    def default_montant_retenue(cls):
+        return 0
+
+    @classmethod
+    def default_montant_net(cls):
+        return 0
 
     @classmethod
     def __setup__(cls):
@@ -123,34 +133,34 @@ class Retenue(Workflow, ModelSQL, ModelView):
                 move_post_number = self.move.post_number
         return move_post_number
 
-    @classmethod
-    def set_type(cls, instances, name, value):
-        pass
-
     @fields.depends('montant_brut', 'type')
-    def on_change_with_montant_retenue(self, name=None):
+    def on_change_with_montant_retenue(self):
         if self.type and self.montant_brut:
             montant_retenue = self.type.taux * self.montant_brut / 100
         else:
             montant_retenue = 0
         return montant_retenue
 
-    @fields.depends('montant_brut', 'type')
-    def on_change_with_montant_net(self, name=None):
-        if self.type and self.montant_brut:
-            montant_net = self.montant_brut - self.type.taux * self.montant_brut / 100
-        elif self.montant_brut and not self.type:
-            montant_net = self.montant_brut
-        else:
-            montant_net = 0
-        return montant_net
+    @fields.depends('type', 'montant_brut', 'montant_retenue', 'montant_net')
+    def on_change_type(self):
+        self.on_change_montant_brut()
 
-    @fields.depends('party')
-    def on_change_with_type(self, name=None):
-        type_id = None
-        if self.party:
-            type_id = self.party.retenue_type.id
-        return type_id
+    @fields.depends('party', 'type')
+    def on_change_party(self):
+        self.type = None
+        if self.party and self.party.retenue_type.id:
+            self.type = self.party.retenue_type.id
+        self.on_change_montant_brut()
+
+    @fields.depends('montant_brut', 'type', 'montant_retenue', 'montant_net')
+    def on_change_montant_brut(self):
+        print(3)
+        if self.montant_brut and self.type:
+            self.montant_retenue = self.type.taux * self.montant_brut / 100
+            self.montant_net = self.montant_brut - self.montant_retenue
+        else:
+            self.montant_retenue = 0
+            self.montant_net = self.montant_brut
 
     @classmethod
     def create_move(cls, retenue):

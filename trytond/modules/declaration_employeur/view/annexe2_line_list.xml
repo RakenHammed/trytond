@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="declaration"/>
+    <field name="party"/>
+    <field name="type_montant" string="Type des montant" expand="1"/>
+    <field name="type_montant_exportation" string="Type des montants exportation" expand="1"/>
+</tree>

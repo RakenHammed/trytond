@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="fiscalyear"/>
+    <field name="assiettes_total" string="Total assiettes" expand="1" sum="1"/>
+    <field name="retenues_total" string="Total retenues" expand="1" sum="1"/>
+    <field name="description" expand="1"/>
+</tree>
