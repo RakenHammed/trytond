@@ -2,17 +2,16 @@
 # this repository contains the full copyright notices and license terms.
 
 from trytond.pool import Pool
-from . import account
+from . import bilan
 
 
 def register():
-    # Pool.register(
-        # account.TaxTemplate,
-        # account.TaxRuleTemplate,
-        # account.FrFECStart,
-        # account.FrFECResult,
-        # module='account_tn', type_='model')
-    # Pool.register(
-    #     account.FrFEC,
-    #     module='account_fr', type_='wizard')
-    pass
+    Pool.register(
+        bilan.OpenBilanParameters,
+        module='account_tn', type_='model')
+    Pool.register(
+        bilan.OpenBilan,
+        module='account_tn', type_='wizard')
+    Pool.register(
+            bilan.Bilan,
+            module='account_tn', type_='report')

@@ -4,8 +4,10 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="fiscalyear"/>
     <field name="fiscalyear"/>
-    <label name="type"/>
-    <field name="type"/>
-    <label name="deferral_period"/>
-    <field name="deferral_period"/>
+    <label name="start_period"/>
+    <field name="start_period"/>
+    <label name="end_period"/>
+    <field name="end_period"/>
+    <label name="posted"/>
+    <field name="posted"/>
 </form>
