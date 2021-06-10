@@ -601,252 +601,470 @@ class Declaration(ModelSQL, ModelView):
         address_formatted = f'{street} -{city} {subdivision} {postal_code}'
         return address_formatted
 
-    # TODO do we need this ?
-    # def texte_recap(self, id):
-    #     pool = Pool()
-    #     User = pool.get('res.user')
-    #     user = User.browse([Transaction().user])[0]
-    #     print(user.id)
-    #     company = user.company
-    #     print(company.party.name)
-    #     company_address = self.get_company_address_formatted(
-    #         company.party.addresses[0])
-    #     declaration = self.browse([id])[0]
-    #     print(company_address)
-    #     print(company.party.identifiers[0].code.zfill(8))
-    #     print(company.party.identifiers[0].code_categorie or '')
-    #     print(company.party.identifiers[0].etablissement or '' )
-    #     print(declaration.fiscalyear.name)
-    #     position_4_to_19 = company.party.identifiers[0].code.zfill(8) +\
-    #         (company.party.identifiers[0].code_categorie or '') + \
-    #         (company.party.identifiers[0].etablissement or '') + \
-    #         declaration.fiscalyear.name
-    #     anx1 = '1'
-    #     anx2 = '1'
-    #     anx3 = '1'
-    #     anx4 = '1'
-    #     anx5 = '1'
-    #     anx6 = '1'
-    #     anx7 = '1'
-    #     if declaration.presence_anx1:
-    #         anx1 = '0'
-    #     if declaration.presence_anx2:
-    #         anx2 = '0'
-    #     if declaration.presence_anx3:
-    #         anx3 = '0'
-    #     if declaration.presence_anx4:
-    #         anx4 = '0'
-    #     if declaration.presence_anx5:
-    #         anx5 = '0'
-    #     if declaration.presence_anx6:
-    #         anx6 = '0'
-    #     if declaration.presence_anx7:
-    #         anx7 = '0'
-    #     res = '000' + position_4_to_19 + \
-    #         anx1 + anx2 + anx3 + anx4 + anx5 + anx6 + anx7 + ''.ljust(12) + \
-    #         '\n' + \
-    #         '010' + str(int(declaration.assiette_010 * 1000)).zfill(15) + \
-    #         '00000' + str(int(declaration.retenue_010 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '170' + str(int(declaration.assiette_170 * 1000)).zfill(15) + \
-    #         '00000' + str(int(declaration.retenue_170 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '300' + ''.zfill(20) + \
-    #         str(int(declaration.retenue_300 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '400' + ''.zfill(20) + \
-    #         str(int(declaration.retenue_400 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '021' + str(int(declaration.assiette_021 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_021 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '023' + str(int(declaration.assiette_023 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_023 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '025' + str(int(declaration.assiette_025 * 1000)).zfill(15) + \
-    #         '00250' + str(int(declaration.retenue_025 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '030' + str(int(declaration.assiette_030 * 1000)).zfill(15) + \
-    #         '00500' + str(int(declaration.retenue_030 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '180' + str(int(declaration.assiette_180 * 1000)).zfill(15) + \
-    #         '00250' + str(int(declaration.retenue_180 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '040' + str(int(declaration.assiette_040 * 1000)).zfill(15) + \
-    #         '00500' + str(int(declaration.retenue_040 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '260' + str(int(declaration.assiette_260 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_260 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '060' + str(int(declaration.assiette_060 * 1000)).zfill(15) + \
-    #         '02000' + str(int(declaration.retenue_060 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '071' + str(int(declaration.assiette_071 * 1000)).zfill(15) + \
-    #         '02000' + str(int(declaration.retenue_071 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '073' + str(int(declaration.assiette_073 * 1000)).zfill(15) + \
-    #         '02000' + str(int(declaration.retenue_073 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '080' + str(int(declaration.assiette_080 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_080 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '241' + str(int(declaration.assiette_241 * 1000)).zfill(15) + \
-    #         '00500' + str(int(declaration.retenue_241 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '242' + str(int(declaration.assiette_242 * 1000)).zfill(15) + \
-    #         '00500' + str(int(declaration.retenue_242 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '091' + str(int(declaration.assiette_091 * 1000)).zfill(15) + \
-    #         '02000' + str(int(declaration.retenue_091 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '093' + str(int(declaration.assiette_093 * 1000)).zfill(15) + \
-    #         '02000' + str(int(declaration.retenue_093 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '100' + str(int(declaration.assiette_100 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_100 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '110' + str(int(declaration.assiette_110 * 1000)).zfill(15) + \
-    #         '00500' + str(int(declaration.retenue_110 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '121' + str(int(declaration.assiette_121 * 1000)).zfill(15) + \
-    #         '00250' + str(int(declaration.retenue_121 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '122' + str(int(declaration.assiette_122 * 1000)).zfill(15) + \
-    #         '00250' + str(int(declaration.retenue_122 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '123' + str(int(declaration.assiette_123 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_123 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '131' + str(int(declaration.assiette_131 * 1000)).zfill(15) + \
-    #         '00050' + str(int(declaration.retenue_131 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '132' + str(int(declaration.assiette_132 * 1000)).zfill(15) + \
-    #         '00150' + str(int(declaration.retenue_132 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '140' + str(int(declaration.assiette_140 * 1000)).zfill(15) + \
-    #         '05000' + str(int(declaration.retenue_140 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '150' + str(int(declaration.assiette_150 * 1000)).zfill(15) + \
-    #         '10000' + str(int(declaration.retenue_150 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '160' + str(int(declaration.assiette_160 * 1000)).zfill(15) + \
-    #         '00000' + str(int(declaration.retenue_160 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '270' + str(int(declaration.assiette_270 * 1000)).zfill(15) + \
-    #         '02500' + str(int(declaration.retenue_270 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '271' + str(int(declaration.assiette_271 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_271 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '200' + str(int(declaration.assiette_200 * 1000)).zfill(15) + \
-    #         '00100' + str(int(declaration.retenue_200 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '191' + str(int(declaration.assiette_191 * 1000)).zfill(15) + \
-    #         '01000' + str(int(declaration.retenue_191 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '192' + str(int(declaration.assiette_192 * 1000)).zfill(15) + \
-    #         '02500' + str(int(declaration.retenue_192 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '051' + str(int(declaration.assiette_051 * 1000)).zfill(15) + \
-    #         '01500' + str(int(declaration.retenue_051 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '220' + str(int(declaration.assiette_220 * 1000)).zfill(15) + \
-    #         '02500' + str(int(declaration.retenue_220 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '250' + str(int(declaration.assiette_250 * 1000)).zfill(15) + \
-    #         '00150' + str(int(declaration.retenue_250 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '280' + str(int(declaration.assiette_280 * 1000)).zfill(15) + \
-    #         '02500' + str(int(declaration.retenue_280 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '290' + str(int(declaration.assiette_290 * 1000)).zfill(15) + \
-    #         '00300' + str(int(declaration.retenue_290 * 1000)).zfill(15) + \
-    #         '\n' + \
-    #         '999' + ''.ljust(20) + \
-    #         str(int(declaration.retenues_total * 1000)).zfill(15)
-    #     # res = (res.upper()).encode('ascii', 'replace')
-    #     # print(res)
-    #     return res
+    def supprime_accent(self, chaine):
+        """ supprime les accents du texte source """
+        accent = [u'é', u'è', u'ê', u'à', u'â', u'ù', u'û', u'ç', u'ô', u'î', u'ï']
+        sans_accent = ['e', 'e', 'e', 'a', 'a', 'u', 'u', 'c', 'o', 'i', 'i']
+        for i in range(11):
+            chaine = chaine.replace(accent[i], sans_accent[i])
+        return chaine
+    
+    def sum(self, lines, field):
+        amount = Decimal('0.0')
+        for line in lines:
+            amount += line[field]
+        return amount
 
-    # def texte_annexe1(self, id):
-    #     pool = Pool()
-    #     User = pool.get('res.user')
-    #     user = User.browse([Transaction().user])[0]
-    #     party = user.company.party
-    #     company_address = get_company_address_formatted(party.addresses[0])
-    #     declaration = self.browse([id])[0]
-    #     position_3_to_18 = party.identifiers[0].code.zfill(8) + party.code_categorie + \
-    #         party.etablissement + declaration.fiscalyear.name
-    #     res = 'E1' + position_3_to_18 + \
-    #         'An1' + declaration.code_acte + str(len(declaration.annexe1_lines)).zfill(6) + party.name.ljust(40) + \
-    #         (party.activite or '').ljust(40) + \
-    #         (company_address.city or '').ljust(40) + \
-    #         ((company_address.street or '') + (company_address.streetbis or '')).ljust(72) + \
-    #         '0034' + \
-    #         (company_address.zip or '').ljust(4) + \
-    #         ''.ljust(177) + '\n'
-    #     for line in declaration.annexe1_lines:
+    def texte_recap(self, id):
+        pool = Pool()
+        User = pool.get('res.user')
+        user = User.browse([Transaction().user])[0]
+        company = user.company
+        company_address = self.get_company_address_formatted(
+            company.party.addresses[0])
+        declaration = self.browse([id])[0]
+        position_4_to_19 = company.party.identifiers[0].code.zfill(8) +\
+            (company.party.identifiers[0].code_categorie or '') + \
+            (company.party.identifiers[0].etablissement or '') + \
+            declaration.fiscalyear.name
+        anx1 = '1'
+        anx2 = '1'
+        anx3 = '1'
+        anx4 = '1'
+        anx5 = '1'
+        anx6 = '1'
+        anx7 = '1'
+        if declaration.presence_anx1:
+            anx1 = '0'
+        if declaration.presence_anx2:
+            anx2 = '0'
+        if declaration.presence_anx3:
+            anx3 = '0'
+        if declaration.presence_anx4:
+            anx4 = '0'
+        if declaration.presence_anx5:
+            anx5 = '0'
+        if declaration.presence_anx6:
+            anx6 = '0'
+        if declaration.presence_anx7:
+            anx7 = '0'
+        res = '000' + position_4_to_19 + \
+            anx1 + anx2 + anx3 + anx4 + anx5 + anx6 + anx7 + ''.ljust(12) + \
+            '\n' + \
+            '010' + str(int(declaration.assiette_010 * 1000)).zfill(15) + \
+            '00000' + str(int(declaration.retenue_010 * 1000)).zfill(15) + \
+            '\n' + \
+            '170' + str(int(declaration.assiette_170 * 1000)).zfill(15) + \
+            '00000' + str(int(declaration.retenue_170 * 1000)).zfill(15) + \
+            '\n' + \
+            '300' + ''.zfill(20) + \
+            str(int(declaration.retenue_300 * 1000)).zfill(15) + \
+            '\n' + \
+            '400' + ''.zfill(20) + \
+            str(int(declaration.retenue_400 * 1000)).zfill(15) + \
+            '\n' + \
+            '021' + str(int(declaration.assiette_021 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_021 * 1000)).zfill(15) + \
+            '\n' + \
+            '023' + str(int(declaration.assiette_023 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_023 * 1000)).zfill(15) + \
+            '\n' + \
+            '025' + str(int(declaration.assiette_025 * 1000)).zfill(15) + \
+            '00250' + str(int(declaration.retenue_025 * 1000)).zfill(15) + \
+            '\n' + \
+            '030' + str(int(declaration.assiette_030 * 1000)).zfill(15) + \
+            '00500' + str(int(declaration.retenue_030 * 1000)).zfill(15) + \
+            '\n' + \
+            '180' + str(int(declaration.assiette_180 * 1000)).zfill(15) + \
+            '00250' + str(int(declaration.retenue_180 * 1000)).zfill(15) + \
+            '\n' + \
+            '040' + str(int(declaration.assiette_040 * 1000)).zfill(15) + \
+            '00500' + str(int(declaration.retenue_040 * 1000)).zfill(15) + \
+            '\n' + \
+            '260' + str(int(declaration.assiette_260 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_260 * 1000)).zfill(15) + \
+            '\n' + \
+            '060' + str(int(declaration.assiette_060 * 1000)).zfill(15) + \
+            '02000' + str(int(declaration.retenue_060 * 1000)).zfill(15) + \
+            '\n' + \
+            '071' + str(int(declaration.assiette_071 * 1000)).zfill(15) + \
+            '02000' + str(int(declaration.retenue_071 * 1000)).zfill(15) + \
+            '\n' + \
+            '073' + str(int(declaration.assiette_073 * 1000)).zfill(15) + \
+            '02000' + str(int(declaration.retenue_073 * 1000)).zfill(15) + \
+            '\n' + \
+            '080' + str(int(declaration.assiette_080 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_080 * 1000)).zfill(15) + \
+            '\n' + \
+            '241' + str(int(declaration.assiette_241 * 1000)).zfill(15) + \
+            '00500' + str(int(declaration.retenue_241 * 1000)).zfill(15) + \
+            '\n' + \
+            '242' + str(int(declaration.assiette_242 * 1000)).zfill(15) + \
+            '00500' + str(int(declaration.retenue_242 * 1000)).zfill(15) + \
+            '\n' + \
+            '091' + str(int(declaration.assiette_091 * 1000)).zfill(15) + \
+            '02000' + str(int(declaration.retenue_091 * 1000)).zfill(15) + \
+            '\n' + \
+            '093' + str(int(declaration.assiette_093 * 1000)).zfill(15) + \
+            '02000' + str(int(declaration.retenue_093 * 1000)).zfill(15) + \
+            '\n' + \
+            '100' + str(int(declaration.assiette_100 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_100 * 1000)).zfill(15) + \
+            '\n' + \
+            '110' + str(int(declaration.assiette_110 * 1000)).zfill(15) + \
+            '00500' + str(int(declaration.retenue_110 * 1000)).zfill(15) + \
+            '\n' + \
+            '121' + str(int(declaration.assiette_121 * 1000)).zfill(15) + \
+            '00250' + str(int(declaration.retenue_121 * 1000)).zfill(15) + \
+            '\n' + \
+            '122' + str(int(declaration.assiette_122 * 1000)).zfill(15) + \
+            '00250' + str(int(declaration.retenue_122 * 1000)).zfill(15) + \
+            '\n' + \
+            '123' + str(int(declaration.assiette_123 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_123 * 1000)).zfill(15) + \
+            '\n' + \
+            '131' + str(int(declaration.assiette_131 * 1000)).zfill(15) + \
+            '00050' + str(int(declaration.retenue_131 * 1000)).zfill(15) + \
+            '\n' + \
+            '132' + str(int(declaration.assiette_132 * 1000)).zfill(15) + \
+            '00150' + str(int(declaration.retenue_132 * 1000)).zfill(15) + \
+            '\n' + \
+            '140' + str(int(declaration.assiette_140 * 1000)).zfill(15) + \
+            '05000' + str(int(declaration.retenue_140 * 1000)).zfill(15) + \
+            '\n' + \
+            '150' + str(int(declaration.assiette_150 * 1000)).zfill(15) + \
+            '10000' + str(int(declaration.retenue_150 * 1000)).zfill(15) + \
+            '\n' + \
+            '160' + str(int(declaration.assiette_160 * 1000)).zfill(15) + \
+            '00000' + str(int(declaration.retenue_160 * 1000)).zfill(15) + \
+            '\n' + \
+            '270' + str(int(declaration.assiette_270 * 1000)).zfill(15) + \
+            '02500' + str(int(declaration.retenue_270 * 1000)).zfill(15) + \
+            '\n' + \
+            '271' + str(int(declaration.assiette_271 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_271 * 1000)).zfill(15) + \
+            '\n' + \
+            '200' + str(int(declaration.assiette_200 * 1000)).zfill(15) + \
+            '00100' + str(int(declaration.retenue_200 * 1000)).zfill(15) + \
+            '\n' + \
+            '191' + str(int(declaration.assiette_191 * 1000)).zfill(15) + \
+            '01000' + str(int(declaration.retenue_191 * 1000)).zfill(15) + \
+            '\n' + \
+            '192' + str(int(declaration.assiette_192 * 1000)).zfill(15) + \
+            '02500' + str(int(declaration.retenue_192 * 1000)).zfill(15) + \
+            '\n' + \
+            '051' + str(int(declaration.assiette_051 * 1000)).zfill(15) + \
+            '01500' + str(int(declaration.retenue_051 * 1000)).zfill(15) + \
+            '\n' + \
+            '220' + str(int(declaration.assiette_220 * 1000)).zfill(15) + \
+            '02500' + str(int(declaration.retenue_220 * 1000)).zfill(15) + \
+            '\n' + \
+            '250' + str(int(declaration.assiette_250 * 1000)).zfill(15) + \
+            '00150' + str(int(declaration.retenue_250 * 1000)).zfill(15) + \
+            '\n' + \
+            '280' + str(int(declaration.assiette_280 * 1000)).zfill(15) + \
+            '02500' + str(int(declaration.retenue_280 * 1000)).zfill(15) + \
+            '\n' + \
+            '290' + str(int(declaration.assiette_290 * 1000)).zfill(15) + \
+            '00300' + str(int(declaration.retenue_290 * 1000)).zfill(15) + \
+            '\n' + \
+            '999' + ''.ljust(20) + \
+            str(int(declaration.retenues_total * 1000)).zfill(15)
+        res = self.supprime_accent(res)
+        res = (res.upper()).encode('ascii', 'replace')
+        return res
 
-    #         if not (line.party.vat_number or line.party.identifiant):
-    #             self.raise_user_error(
-    #                 'identifiant manquant:' + line.party.name)
-    #         tiers = line.party
-    #         party_address = tiers.addresses[0]
-    #         adresse_tiers = (party_address.street or '') + ' ' + \
-    #             (party_address.streetbis or '') + ' ' + \
-    #             (party_address.zip or '') + ' ' + \
-    #             (party_address.city or '')
-    #         if tiers.nature_identifiant == 'cin':
-    #             nature_id = '2'
-    #             identifiant_tiers = tiers.identifiant.zfill(8) + ''.ljust(5)
-    #         elif tiers.nature_identifiant == 'carte de sejour':
-    #             nature_id = '3'
-    #             identifiant_tiers = tiers.identifiant.zfill(8) + ''.ljust(5)
-    #         else:
-    #             self.raise_user_error(
-    #                 'nature identifiant invalide:' + tiers.name)
-    #         res += 'L1' + \
-    #             position_3_to_18 + \
-    #             str(line.ordre).zfill(6) + nature_id + \
-    #             (tiers.identifiant.rjust(7, ' ')).ljust(13) + \
-    #             tiers.name.ljust(40) + (tiers.activite or '').ljust(40) + \
-    #             adresse_tiers.ljust(120) + \
-    #             line.situation + str(line.nbre_enfants).zfill(2) + \
-    #             line.date_debut.strftime("%d%m%Y") + line.date_fin.strftime("%d%m%Y") + str(line.duree).zfill(3) + \
-    #             str(int(line.revenu_imposable * 1000)).zfill(15) + \
-    #             str(int(line.avantages * 1000)).zfill(15) + \
-    #             str(int(line.revenu_imposable_total * 1000)).zfill(15) + \
-    #             str(int(line.revenu_reinvesti * 1000)).zfill(15) + \
-    #             str(int(line.retenues_regime_commun * 1000)).zfill(15) + \
-    #             str(int(line.retenues_taux20 * 1000)).zfill(15) + \
-    #             str(int(line.contribution_solidarite * 1000)).zfill(15) + \
-    #             str(int(line.contribution_2020 * 1000)).zfill(15) + \
-    #             str(int(line.montant_net * 1000)).zfill(15) + \
-    #             ''.ljust(10) + '\n'
-    #     res += 'T1' + \
-    #         position_3_to_18 + \
-    #         ''.ljust(242) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'revenu_imposable') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'avantages') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'revenu_imposable_total') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'revenu_reinvesti') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'retenues_regime_commun') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'retenues_taux20') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'contribution_solidarite') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'contribution_2020') * 1000)).zfill(15) + \
-    #         str(int(self.sum(declaration.annexe1_lines, 'montant_net') * 1000)).zfill(15) + \
-    #         ''.ljust(10) + '\n'
-    #     res = self.supprime_accent(res)
-    #     res = (res.upper()).encode('ascii', 'replace')
-    #     print res
-    #     return res
-    # @classmethod
-    # def set_assiettes_total(cls, declarations, name, value):
-    #     pass
+    def texte_annexe1(self, id):
+        pool = Pool()
+        User = pool.get('res.user')
+        user = User.browse([Transaction().user])[0]
+        party = user.company.party
+        company_address = party.addresses[0]
+        declaration = self.browse([id])[0]
+        position_3_to_18 = party.identifiers[0].code.zfill(8) + party.identifiers[0].code_categorie + \
+            party.identifiers[0].etablissement + declaration.fiscalyear.name
+        res = 'E1' + position_3_to_18 + \
+            'An1' + declaration.code_acte + str(len(declaration.annexe1_lines)).zfill(6) + party.name.ljust(40) + \
+            (party.identifiers[0].activite or '').ljust(40) + \
+            (company_address.city or '').ljust(40) + \
+            ((company_address.street or '') + (company_address.subdivision.name or '')).ljust(72) + \
+            '0034' + \
+            (company_address.postal_code or '').ljust(4) + \
+            ''.ljust(177) + '\n'
+        for line in declaration.annexe1_lines:
 
-    # @classmethod
-    # def set_retenues_total(cls, declarations, name, value):
-    #     pass
+            if not (line.party.identifiers[0].vat_number or line.party.identifiers[0].identifiant):
+                self.raise_user_error(
+                    'identifiant manquant:' + line.party.name)
+            tiers = line.party
+            party_address = tiers.addresses[0]
+            adresse_tiers = (party_address.street or '') + ' ' + \
+                (party_address.subdivision or '') + ' ' + \
+                (party_address.postal_code or '') + ' ' + \
+                (party_address.city or '')
+            if tiers.identifiers[0].nature_identifiant == 'cin':
+                nature_id = '2'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            elif tiers.identifiers[0].nature_identifiant == 'carte de sejour':
+                nature_id = '3'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            else:
+                self.raise_user_error(
+                    'nature identifiant invalide:' + tiers.name)
+            res += 'L1' + \
+                position_3_to_18 + \
+                str(line.ordre).zfill(6) + nature_id + \
+                (tiers.identifiers[0].identifiant.rjust(7, ' ')).ljust(13) + \
+                tiers.name.ljust(40) + (tiers.identifiers[0].activite or '').ljust(40) + \
+                adresse_tiers.ljust(120) + \
+                line.situation + str(line.nbre_enfants).zfill(2) + \
+                line.date_debut.strftime("%d%m%Y") + line.date_fin.strftime("%d%m%Y") + str(line.duree).zfill(3) + \
+                str(int(line.revenu_imposable * 1000)).zfill(15) + \
+                str(int(line.avantages * 1000)).zfill(15) + \
+                str(int(line.revenu_imposable_total * 1000)).zfill(15) + \
+                str(int(line.revenu_reinvesti * 1000)).zfill(15) + \
+                str(int(line.retenues_regime_commun * 1000)).zfill(15) + \
+                str(int(line.retenues_taux20 * 1000)).zfill(15) + \
+                str(int(line.contribution_solidarite * 1000)).zfill(15) + \
+                str(int(line.contribution_2020 * 1000)).zfill(15) + \
+                str(int(line.montant_net * 1000)).zfill(15) + \
+                ''.ljust(10) + '\n'
+        res += 'T1' + \
+            position_3_to_18 + \
+            ''.ljust(242) + \
+            str(int(self.sum(declaration.annexe1_lines, 'revenu_imposable') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'avantages') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'revenu_imposable_total') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'revenu_reinvesti') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'retenues_regime_commun') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'retenues_taux20') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'contribution_solidarite') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'contribution_2020') * 1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe1_lines, 'montant_net') * 1000)).zfill(15) + \
+            ''.ljust(10) + '\n'
+        res = self.supprime_accent(res)
+        res = (res.upper()).encode('ascii', 'replace')
+        return res
+
+    def texte_annexe2(self, id):
+        pool = Pool()
+        user = pool.get('res.user').browse([Transaction().user])[0]
+        company = user.company
+        company_address = company.party.addresses[0]
+        declaration = self.browse([id])
+        position_3_to_18 = company.party.indetifiers[0].vat_number.zfill(8) + company.party.indetifiers[0].code_categorie + \
+		    company.party.indetifiers[0].etablissement + declaration.fiscalyear.name
+        res = 'E2' + position_3_to_18 + \
+            'An2' + declaration.code_acte + str(len(declaration.annexe2_lines)).zfill(6) + company.name.ljust(40) + \
+		    (company.party.indetifiers[0].activite or '').ljust(40) + \
+		    (company_address.city or '').ljust(40) + \
+		    ((company_address.street or '') + (company_address.subdivision or '')).ljust(72) + \
+		    '0034' + \
+		    (company_address.postal_code or '').ljust(4) + \
+		    ''.ljust(177) + '\n'
+        for line in declaration.annexe2_lines:
+
+
+            if not (line.party.indetifiers[0].vat_number or line.party.indetifiers[0].identifiant):
+                self.raise_user_error('identifiant manquant:' + line.party.name)
+            tiers = line.party
+            party_address = tiers.addresses[0]
+            adresse_tiers = (party_address.street or '') + ' ' + \
+                (party_address.subdivision or '') + ' ' + \
+                (party_address.postal_code or '') + ' ' + \
+                (party_address.city or '')
+            if tiers.indetifiers[0].nature_identifiant == 'mf':
+                nature_id = '1'
+                identifiant_tiers = tiers.indetifiers[0].vat_number.zfill(8) + tiers.indetifiers[0].code_tva + tiers.indetifiers[0].code_categorie + tiers.indetifiers[0].etablissement
+            elif tiers.indetifiers[0].nature_identifiant == 'cin':
+                nature_id = '2'
+                identifiant_tiers = tiers.indetifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            else:
+                self.raise_user_error('nature identifiant invalide:' + tiers.name)
+
+            res += 'L2' + \
+                position_3_to_18 + \
+                str(line.ordre).zfill(6) + nature_id + \
+                identifiant_tiers + \
+                tiers.name.ljust(40) + (tiers.indetifiers[0].activite or '').ljust(40) + \
+                adresse_tiers.ljust(120) + \
+                line.type_montant + \
+                str(int(line.montant_honoraires*1000)).zfill(15) + \
+                str(int(line.montant_rr*1000)).zfill(15) + \
+                str(int(line.montant_jetons*1000)).zfill(15) + \
+                str(int(line.montant_remunerations*1000)).zfill(15) + \
+                str(int(line.montant_plusvalue*1000)).zfill(15) + \
+                str(int(line.montant_hotels*1000)).zfill(15) + \
+                str(int(line.montant_artistes*1000)).zfill(15) + \
+                str(int(line.montant_bureaux_exportateurs*1000)).zfill(15) + \
+                line.type_montant_exportation + \
+                str(int(line.montant_honoraires_exportation*1000)).zfill(15) + \
+                str(int(line.montant_retenues*1000)).zfill(15) + \
+                str(int(line.montant_net*1000)).zfill(15) + '\n'
+
+        res += 'T2' + \
+            position_3_to_18 + \
+            ''.ljust(221) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_honoraires')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_rr')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_jetons')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_remunerations')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_plusvalue')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_hotels')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_artistes')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_bureaux_exportateurs')*1000)).zfill(15) + \
+            ' ' + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_honoraires_exportation')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_retenues')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe2_lines, 'montant_net')*1000)).zfill(15) + \
+            '\n'
+        res = self.supprime_accent(res)
+        res = (res.upper()).encode('ascii', 'replace')
+        return res
+    
+    def texte_annexe5(self, id):
+        pool = Pool()
+        user = pool.get('res.user').browse([Transaction().user])[0]
+        company = user.company
+        company_address = company.party.addresses[0]
+        declaration = self.browse([id])
+        position_3_to_18 = company.party.identifiers[0].vat_number.zfill(8) + company.party.identifiers[0].code_categorie + \
+		    company.party.identifiers[0].etablissement + declaration.fiscalyear.name
+        res = 'E5' + position_3_to_18 + \
+		    'An5' + declaration.code_acte + str(len(declaration.annexe5_lines)).zfill(6) + company.name.ljust(40) + \
+		    (company.party.identifiers[0].activite or '').ljust(40) + \
+		    (company_address.city or '').ljust(40) + \
+		    ((company_address.street or '') + (company_address.subdivision or '')).ljust(72) + \
+		    '0034' + \
+		    (company_address.postal_code or '').ljust(4) + \
+		    ''.ljust(177) + '\n'
+        for line in declaration.annexe5_lines:
+            if not (line.party.identifiers[0].vat_number or line.party.identifiers[0].identifiant):
+                self.raise_user_error('identifiant manquant:' + line.party.name)
+            tiers = line.party
+            party_address = tiers.addresses[0]
+            adresse_tiers = (party_address.street or '') + ' ' + \
+                (party_address.subdivision or '') + ' ' + \
+                (party_address.postal_code or '') + ' ' + \
+                (party_address.city or '')
+            if tiers.identifiers[0].nature_identifiant == 'mf':
+                nature_id = '1'
+                identifiant_tiers = tiers.identifiers[0].vat_number.zfill(8) + tiers.identifiers[0].code_tva + tiers.identifiers[0].code_categorie + tiers.identifiers[0].etablissement
+            elif tiers.identifiers[0].nature_identifiant == 'cin':
+                nature_id = '2'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            elif tiers.identifiers[0].nature_identifiant == 'carte de sejour':
+                nature_id = '3'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            elif tiers.identifiers[0].nature_identifiant == 'ni domoicilie ni etabli de sejour':
+                nature_id = '4'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            else:
+                self.raise_user_error('nature identifiant invalide:' + tiers.name)
+            res += 'L5' + \
+                position_3_to_18 + \
+                str(line.ordre).zfill(6) + nature_id + \
+                tiers.identifiers[0].vat_number.zfill(8) + tiers.identifiers[0].code_tva + tiers.identifiers[0].code_categorie + tiers.identifiers[0].etablissement + \
+                tiers.name.ljust(40) + (tiers.identifiers[0].activite or '').ljust(40) + \
+                adresse_tiers.ljust(120) + \
+                str(int(line.montant_1000_export_IS10*1000)).zfill(15) + \
+                str(int(line.montant_ret_1000_export_IS10*1000)).zfill(15) + \
+                str(int(line.montant_1000_autres*1000)).zfill(15) + \
+                str(int(line.montant_ret_1000_autres*1000)).zfill(15) + \
+                str(int(line.montant_1000_public*1000)).zfill(15) + \
+                str(int(line.montant_ret_1000_public*1000)).zfill(15) + \
+                str(int(line.montant_marches_nonresidents*1000)).zfill(15) + \
+                str(int(line.montant_ret_marches_nonresidents*1000)).zfill(15) + \
+                str(int(line.montant_net*1000)).zfill(15) + \
+                ''.ljust(32) + '\n'
+
+        res += 'T5' + \
+            position_3_to_18 + \
+            ''.ljust(220) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_1000_export_IS10')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_ret_1000_export_IS10')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_1000_autres')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_ret_1000_autres')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_1000_public')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_ret_1000_public')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_marches_nonresidents')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_ret_marches_nonresidents')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe5_lines, 'montant_net')*1000)).zfill(15) + \
+            ''.ljust(32) + '\n'
+        res = self.supprime_accent(res)
+        res = (res.upper()).encode('ascii', 'replace')
+        return res
+
+    def texte_annexe6(self, id):
+        pool = Pool()
+        user = pool.get('res.user').browse([Transaction().user])[0]
+        company = user.company
+        company_address = company.party.addresses[0]
+        declaration = self.browse([id])
+        position_3_to_18 = company.party.identifiers[0].vat_number.zfill(8) + company.party.identifiers[0].code_categorie + \
+            company.party.identifiers[0].etablissement + declaration.fiscalyear.name
+        res = 'E6' + position_3_to_18 + \
+            'An6' + declaration.code_acte + str(len(declaration.annexe6_lines)).zfill(6) + company.name.ljust(40) + \
+            (company.party.identifiers[0].activite or '').ljust(40) + \
+            (company_address.city or '').ljust(40) + \
+            ((company_address.street or '') + (company_address.subdivision or '')).ljust(72) + \
+            '0034' + \
+            (company_address.postal_code or '').ljust(4) + \
+            ''.ljust(177) + '\n'
+        for line in declaration.annexe6_lines:
+            if not (line.party.identifiers[0].vat_number or line.party.identifiers[0].identifiant):
+                self.raise_user_error('identifiant manquant:' + line.party.name)
+            tiers = line.party
+            party_address = tiers.addresses[0]
+            adresse_tiers = (party_address.street or '') + ' ' + \
+                (party_address.subdivision or '') + ' ' + \
+                (party_address.postal_code or '') + ' ' + \
+                (party_address.city or '')
+            if tiers.nature_identifiant == 'mf':
+                nature_id = '1'
+                identifiant_tiers = tiers.identifiers[0].vat_number.zfill(8) + tiers.identifiers[0].code_tva + tiers.identifiers[0].code_categorie + tiers.identifiers[0].etablissement
+            elif tiers.identifiers[0].nature_identifiant == 'cin':
+                nature_id = '2'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            elif tiers.identifiers[0].nature_identifiant == 'carte de sejour':
+                nature_id = '3'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            elif tiers.identifiers[0].nature_identifiant == 'ni domoicilie ni etabli de sejour':
+                nature_id = '4'
+                identifiant_tiers = tiers.identifiers[0].identifiant.zfill(8) + ''.ljust(5)
+            else:
+                self.raise_user_error('nature identifiant invalide:' + tiers.name)
+            res += 'L6' + \
+                position_3_to_18 + \
+                str(line.ordre).zfill(6) + nature_id + \
+                identifiant_tiers + \
+                tiers.name.ljust(40) + (tiers.identifiers[0].activite or '').ljust(40) + \
+                adresse_tiers.ljust(120) + \
+                str(int(line.montant_ristournes*1000)).zfill(15) + \
+                str(int(line.montant_ventes_forfaitaire*1000)).zfill(15) + \
+                str(int(line.montant_avance_ventes_forfaitaire*1000)).zfill(15) + \
+                str(int(line.montant_jeux_hasard*1000)).zfill(15) + \
+                str(int(line.retenue_jeux_hasard*1000)).zfill(15) + \
+                str(int(line.montant_distribution_20md*1000)).zfill(15) + \
+                str(int(line.retenue_distribution_20md*1000)).zfill(15) + \
+                str(int(line.montant_especes*1000)).zfill(15) + \
+                ''.ljust(47) + '\n'
+
+        res += 'T6' + \
+            position_3_to_18 + \
+            ''.ljust(220) + \
+            str(int(self.sum(declaration.annexe6_lines, 'montant_ristournes')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'montant_ventes_forfaitaire')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'montant_avance_ventes_forfaitaire')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'montant_jeux_hasard')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'retenue_jeux_hasard')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'montant_distribution_20md')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'retenue_distribution_20md')*1000)).zfill(15) + \
+            str(int(self.sum(declaration.annexe6_lines, 'montant_especes')*1000)).zfill(15) + \
+            ''.ljust(47) + '\n'
+        res = self.supprime_accent(res)
+        res = (res.upper()).encode('ascii', 'replace')
+        return res
 
 
 class Annexe1Line(ModelSQL, ModelView):
