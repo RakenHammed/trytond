@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form col="6">
+    <label name="annee1"/>
+    <field name="annee1"/>
+    <label name="annee2"/>
+    <field name="annee2"/>
+    <separator string="montants" colspan="6"/>
+    <label name="journal"/>
+    <field name="journal"/>
+    <label name="period"/>
+    <field name="period"/>
+    <label name="date"/>
+    <field name="date"/>
+    <label name="state"/>
+    <field name="state"/>
+    <group col="2" colspan="2" id="buttons">
+        <button string="Open" name="open" confirm="si vous confirmez, les éritures comptables seront générées" icon="tryton-ok"/>
+        <button string="Draft" name="draft" confirm="si vous confirmez, les écritures comptables seront supprimées" icon="tryton-undo"/>
+    </group>
+</form>

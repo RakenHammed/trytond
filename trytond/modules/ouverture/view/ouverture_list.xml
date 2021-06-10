@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="annee1"/>
+    <field name="annee2"/>
+    <field name="date"/>
+    <field name="journal"/>
+</tree>
